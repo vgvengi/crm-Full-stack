@@ -10,8 +10,8 @@ export default function routes() {
       <Routes>
         <Route path="/" element={<Dashboard />}>
           <Route index element={<Home />} />
-          <Route index path="contacts" element={<Contacts />} />
-          <Route index path="companies" element={<Companies />} />
+          <Route  path="contacts" element={<Contacts />} />
+          <Route  path="companies" element={<Companies />} />
         </Route>
       </Routes>
     </div>
