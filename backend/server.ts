@@ -1,8 +1,10 @@
-import  express  from "express";
+import  express, { Router }  from "express";
 import cors from "cors";
+import contactRouter from "./routes/contacts.routes";
+const router:Router =express.Router();
+// import cors from "cors"
 require("dotenv").config();
 
-const contactRouter=require("./routes/contacts.routes")
 const app=express();
 app.use(cors());
 app.use(express.json());
