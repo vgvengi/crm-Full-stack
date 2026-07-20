@@ -6,7 +6,7 @@ type NewTaskListProps ={
     onClose :()=>void;
 }
 function NewTaskList({onClose}:NewTaskListProps) {
-    const 
+    // const 
     const taskType =["Call","Email","Todo"];
   return (
     // <div className="fixed top-0 right-0 h-screen w-[480px] bg-white shadow-2xl z-50">

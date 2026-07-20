@@ -29,7 +29,7 @@ router.post("/", async (req: Request, res: Response) => {
       jobTitle,
       phoneNumber,
       lifeCycleStage,
-      leadStatus
+      leadStatus,
     ]);
 
     res.status(201).json({
@@ -39,16 +39,15 @@ router.post("/", async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json((
-    {
+    res.status(500).json({
       success: false,
       message: "Failed to create contact",
-    }));
+    });
   }
 });
 
 router.get("/", async (req, res) => {
-    console.log("GET /api/contacts called");
+  console.log("GET /api/contacts called");
 
   try {
     const [rows] = await db.query("SELECT * FROM contacts");

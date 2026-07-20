@@ -1,13 +1,17 @@
 // import React from 'react'
+// import { useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaListCheck, FaPlus } from "react-icons/fa6";
 
 import MeetingCard from "../../components/meetings/MeetingCard";
 import Tasks from "../../components/tasks/Tasks";
-import SalesPipeline from "../../components/salesPipeline/SalesPipeline";
+import SalesPipeline from "../../components/sales-pipe-line/SalesPipeline";
+
 
 function Home() {
+      // const [clickNewTask, setClickNewTask] = useState(false);
+
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -27,8 +31,8 @@ function Home() {
   };
 
   return (
-    <div className="w-full  h-full ">
-      <div className={` flex flex-col mb-10 mx-[211px]`}>
+    <div className="w-full  h-full mt-10 ">
+      <div className={` flex flex-col  mx-[211px]`}>
         <div className="flex flex-row items-center">
           <h3>{today}</h3>
           <div className="flex items-center ms-auto">
@@ -54,7 +58,9 @@ function Home() {
         <div className="mt-6 flex flex-row items-center gap-2">
           <FaListCheck />
           <p>Tasks</p>
-          <div className="ms-auto mr-2 cursor-pointer">
+          <div className="ms-auto mr-2 cursor-pointer"
+          onClick={()=>setClickNewTask}
+          >
             <FaPlus color="gray" />
           </div>
           <div className="flex flex-row items-center">
@@ -74,7 +80,7 @@ function Home() {
         </div>
 
         <div className="w-full h-full z-40 inset-0">
-          <Tasks />
+          {/* <Tasks setClickNewTask={setClickNewTask(true)} /> */}
         </div>
       </div>
     </div>

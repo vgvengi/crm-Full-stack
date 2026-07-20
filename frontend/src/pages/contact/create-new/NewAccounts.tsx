@@ -21,8 +21,31 @@ function NewAccounts({ onClose }: NewAccountsProps) {
     isValid ||
     formData.firstName.trim() != "" ||
     formData.lastName.trim() != "";
-  const handleCreate = async () => {};
-  console.log(canContinue);
+  // const handleCreate = async () => {};
+  const handleCreate = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/contacts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to create contact");
+    }
+
+    alert(data.message);
+    onClose(); // Close the modal after successful creation
+  } catch (error) {
+    console.error(error);
+    alert("Failed to create contact");
+  }
+};
+  // console.log(canContinue);
   useEffect(() => {
     const timer = setTimeout(() => {
       const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
@@ -32,7 +55,7 @@ function NewAccounts({ onClose }: NewAccountsProps) {
     return () => clearTimeout(timer);
   }, [formData.email]);
 
-  //Event Handler
+  //Input handler
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -191,13 +214,14 @@ function NewAccounts({ onClose }: NewAccountsProps) {
         <div>
           <button
             className={`p-3 border rounded-xl 
-           hover:bg-[#F0F0F0]
+           hover:bg-[#F0F0F0] 
            ${
              canContinue
                ? "cursor-pointer hover:bg-[#F0F0F0]"
                : "cursor-not-allowed opacity-50 bg-gray-200"
            }
            `}
+            type="button"
             disabled={!canContinue}
           >
             Create and Add
