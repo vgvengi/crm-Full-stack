@@ -15,6 +15,7 @@ import {
 import useClickOutSide from "@/hooks/useClickOutSide";
 import CreateNew from "./create-new/CreateNew";
 import NewAccounts from "./create-new/NewAccounts";
+import ContactsTable from "./ContactsTable";
 // import { data } from "react-router-dom";
 
 function Contacts() {
@@ -29,13 +30,12 @@ function Contacts() {
   // Ref
   const ref = useRef<HTMLDivElement | null>(null);
   // Event Handling
-
   useClickOutSide(ref, () => {
     setOpen(false);
   });
 
   useEffect(() => {
-       const fetchContacts = async () => {
+    const fetchContacts = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/contacts");
         const data = await response.json();
@@ -58,7 +58,6 @@ function Contacts() {
               <h1 className="text-[20px] font-semibold">Contacts</h1>
               <ChevronDown size={20} />
             </div>
-
             <div className="flex gap-3 relative" ref={ref}>
               <button className="rounded-lg border p-3 cursor-pointer hover:bg-gray-100">
                 <MoreVertical size={14} />
@@ -174,71 +173,7 @@ function Contacts() {
           {/* Divider */}
           {/* Table */}
           <div className="overflow-x-auto rounded-xl border mt-4 ">
-            <table className="min-w-[1500px] w-full">
-              <thead className="bg-[#cccccc]">
-                <tr className="border-b">
-                  <th className="w-16 border-r-1  ">
-                    <input type="checkbox" className="h-5 w-5" />
-                  </th>
-
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Name
-                  </th>
-
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Email
-                  </th>
-
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Phone Number
-                  </th>
-
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Contact owner
-                  </th>
-
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Primary company
-                  </th>
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Lead Status
-                  </th>
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Last activity date
-                  </th>
-                  <th className="px-4 py-2 text-left text-[13px] font-semibold">
-                    Created date
-                  </th>
-                  <th className="sticky right-0 z-20 bg-[#cccccc] w-12 px-1 py-1 text-center text-lg border-l">
-                    +
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {contacts.map((contact) => (
-                  <tr key={contact.id}>
-                    <td>
-                      <input type="checkbox" />
-                    </td>
-                    <td>
-                      {contact.first_name} {contact.last_name}
-                    </td>
-                    <td>{contact.email}</td>
-
-                    <td>{contact.phoneNumber}</td>
-
-                    <td>{contact.contactOwner}</td>
-                    <td>-</td>
-
-                    <td>{contact.leadStatus}</td>
-
-                    <td>-</td>
-
-                    <td>-</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <ContactsTable />
           </div>
         </div>
       </div>

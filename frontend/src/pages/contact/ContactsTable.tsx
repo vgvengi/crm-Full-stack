@@ -16,12 +16,20 @@ function ContactsTable() {
   const [contacts, setContacts] = useState<Contact[]>([]);
 
   const fetchData =async()=>{
-    const response = await fetch("http://localhost:5000/api/contacts");
-    const data = await response.json();
-    setContacts(data);
+    try{
+
+      const response = await fetch("http://localhost:5000/api/contacts");
+      if(!response.ok){
+        throw new Error("failed to fetch")
+      }
+      const data = await response.json();
+      setContacts(data);
+    } catch(error){
+      console.log(error)
+    }
   }
   useEffect(() => {
-    fetchData;
+    fetchData();
   }, []);
   const columns = [
     { id: 1, label: "Name" },
@@ -35,20 +43,22 @@ function ContactsTable() {
   ];
   return (
     <div>
-      <div className="overflow-x-auto rounded-xl border mt-4 ">
+      <div className="overflow-x-auto">
         <table className="min-w-[1500px] w-full">
           <thead className="bg-[#cccccc]">
             <tr className="border-b">
               {columns.map((column) => (
-                <th key={column.id}>{column.label}</th>
+                <th   key={column.id}
+                className="px-4 py-2 text-left text-[13px] font-semibold"
+                >{column.label}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {contacts.map((contact) => (
               <tr key={contact.id}>
-                <td>
-                  <input  type="checkbox" />
+                <td className=""> 
+                  <input className=""  type="checkbox"  />
                 </td>
                 <td>
                   {contact.first_name} {contact.last_name}
