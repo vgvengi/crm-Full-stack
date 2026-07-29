@@ -14,7 +14,7 @@ type Contact = {
 };
 
 function ContactsTable({
-  selectedContacts,
+  selectedContacts  ,
   onCheckboxChange,
   selectedAll,
   onSelectAll,
@@ -28,7 +28,7 @@ function ContactsTable({
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/contacts")
+      const response = await fetch("http://localhost:5000/api/contacts");
       if (!response.ok) {
         throw new Error("failed to fetch");
       }
@@ -37,7 +37,7 @@ function ContactsTable({
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -77,39 +77,35 @@ function ContactsTable({
             </tr>
           </thead>
           <tbody>
-            {
-             contacts.map((contact) => (
-                <tr
-                  key={contact.id}
-                  className=" hover:bg-#4D4D4"
-                >
-                  <td className="px-4 py-1 flex items-center justify-center">
-                    <input
-                      type="checkbox"
-                      className="w-5 h-5 cursor-pointer"
-                      checked={selectedContacts.includes(contact.id)}
-                      onChange={() => onCheckboxChange(contact.id)}
-                    />
-                  </td>
-                  <td className="text-[#006162] underline">
-                    {contact.first_name} {contact.last_name}
-                  </td>
-                  <td className="text-[#006162] underline">{contact.email}</td>
+            {contacts.map((contact) => (
+              <tr key={contact.id} className=" hover:bg-#4D4D4">
+                <td className="px-4 py-1 flex items-center justify-center">
+                  <input
+                    type="checkbox"
+                    className="w-5 h-5 cursor-pointer"
+                    checked={selectedContacts.includes(contact.id)}
+                    onChange={() => onCheckboxChange(contact.id)}
+                  />
+                </td>
+                <td className="text-[#006162] underline">
+                  {contact.first_name} {contact.last_name}
+                </td>
+                <td className="text-[#006162] underline">{contact.email}</td>
 
-                  <td className="text-[#006162] underlined">
-                    {contact.phoneNumber}
-                  </td>
+                <td className="text-[#006162] underlined">
+                  {contact.phoneNumber}
+                </td>
 
-                  <td>{contact.contactOwner}</td>
-                  <td>-</td>
+                <td>{contact.contactOwner}</td>
+                <td>-</td>
 
-                  {/* <td>{contact.leadStatus}</td> */}
+                {/* <td>{contact.leadStatus}</td> */}
 
-                  <td>-</td>
+                <td>-</td>
 
-                  <td>-</td>
-                </tr>
-              ))}
+                <td>-</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

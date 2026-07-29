@@ -16,6 +16,7 @@ import {
 import useClickOutSide from "@/hooks/useClickOutSide";
 import CreateNew from "./create-new/CreateNew";
 import NewAccounts from "./create-new/NewAccounts";
+import EditCompanies from "./EditCompanies";
 import ContactsTable from "./ContactsTable";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../ui/tooltip";
 // import { data } from "react-router-dom";
@@ -238,6 +239,9 @@ function Contacts() {
           </div>
           {/* Divider */}
           {/* Table */}
+          <div>
+            <EditCompanies/>
+          </div>
           <div className="overflow-x-auto rounded-xl border mt-4 ">
             <ContactsTable
               selectedContacts={selectedContacts}

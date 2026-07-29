@@ -10,7 +10,7 @@ type createNewProp = {
 
 function CreateNew({ onClose, onSetUpMySelf }: createNewProp) {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center 
+    <div className="fixed inset-0 z-100 flex flex-col items-center 
     justify-center bg-black/40 backdrop-blur-sm">
       <div className="w-250 rounded-xl bg-white shadow-2xl flex flex-col 
       items-center py-2 px-4">
