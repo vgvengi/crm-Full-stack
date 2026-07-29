@@ -39,7 +39,6 @@ function Contacts() {
   // for hiding the contacts
   const [isCollapase, setIsCollapse] = useState(false);
 
-
   const [showNewAccount, setShowNewAccount] = useState(false);
 
   // state for contact in table
@@ -53,7 +52,6 @@ function Contacts() {
   useClickOutSide(ref, () => {
     setOpen(false);
   });
-
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -71,17 +69,17 @@ function Contacts() {
   const handleSelectAll = (checked: boolean) => {
     setSelectedAll(checked);
     if (checked) {
-      setSelectedContacts(contacts.map(contact => contact.id));
+      setSelectedContacts(contacts.map((contact) => contact.id));
     } else {
       setSelectedContacts([]);
     }
   };
 
   const handleCheckboxChange = (contactId: number) => {
-    setSelectedContacts(prev =>
+    setSelectedContacts((prev) =>
       prev.includes(contactId)
-        ? prev.filter(id => id !== contactId)
-        : [...prev, contactId]
+        ? prev.filter((id) => id !== contactId)
+        : [...prev, contactId],
     );
   };
 
@@ -89,94 +87,89 @@ function Contacts() {
     <div className="mt-3">
       <div className="min-h-screen p-1">
         <div className="mx-auto bg-white ">
-          <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              isCollapase
-                ? "max-h-0 opacity-0 -translate-y-2"
-                : "max-h-60 opacity-100 translate-y-0"
-            }`}
-          >
-            {/* {!isCollapase && ( */}
-            {/* <> */}
-
-            {/* Header */}
-            <div className="flex items-center justify-between">
-              {/* <> */}
-              <div className="flex items-center gap-2">
-                <h1 className="text-[20px] font-semibold">Contacts</h1>
-                <ChevronDown size={20} />
-              </div>
-              <div className="flex gap-3 relative" ref={ref}>
-                <button className="rounded-lg border p-3 cursor-pointer hover:bg-gray-100">
-                  <MoreVertical size={14} />
-                </button>
-                <button
-                  className="flex items-center gap-2 rounded-lg cursor-pointer
-               bg-black px-3 text-white"
-                  onClick={() => setOpen((prev) => !prev)}
-                >
-                  <p className="text-[12px]">Add contacts</p>
-                  <ChevronDown size={13} />
-                </button>
-                {open && (
-                  <div
-                    className="flex flex-col absolute top-12 left-7 py-2
-                border shadow-2xl bg-white "
-                  >
-                    <button
-                      className="w-35  px-2 py-2.5 
-                  cursor-pointer hover:bg-[#cccccc]"
-                      onClick={() => {
-                        setOpen(false);
-                        setCreateNew(true);
-                      }}
-                    >
-                      Create new
-                    </button>
-                    <button
-                      className="w-35 px-2 py-2.5
-                   cursor-pointer hover:bg-[#cccccc]"
-                    >
-                      Import{" "}
-                    </button>
+          <div>
+            {!isCollapase && (
+              <>
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  {/* <> */}
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-[20px] font-semibold">Contacts</h1>
+                    <ChevronDown size={20} />
                   </div>
-                )}
-                {createNew && (
-                  <CreateNew
-                    onClose={() => setCreateNew(false)}
-                    onSetUpMySelf={() => {
-                      setCreateNew(false);
-                      setShowNewAccount(true);
-                    }}
-                  />
-                )}
-                {showNewAccount && (
-                  <NewAccounts onClose={() => setShowNewAccount(false)} />
-                )}
-              </div>
-            </div>
+                  <div className="flex gap-3 relative z-1000" ref={ref}>
+                    <button className="rounded-lg border p-3 cursor-pointer hover:bg-gray-100">
+                      <MoreVertical size={14} />
+                    </button>
+                    <button
+                      className="flex items-center gap-2 rounded-lg cursor-pointer
+               bg-black px-3 text-white"
+                      onClick={() => setOpen((prev) => !prev)}
+                    >
+                      <p className="text-[12px]">Add contacts</p>
+                      <ChevronDown size={13} />
+                    </button>
+                    {open && (
+                      <div
+                        className="flex flex-col absolute top-12 left-7 py-2
+                border shadow-2xl bg-white "
+                      >
+                        <button
+                          className="w-35  px-2 py-2.5 
+                  cursor-pointer hover:bg-[#cccccc]"
+                          onClick={() => {
+                            setOpen(false);
+                            setCreateNew(true);
+                          }}
+                        >
+                          Create new
+                        </button>
+                        <button
+                          className="w-35 px-2 py-2.5
+                   cursor-pointer hover:bg-[#cccccc]"
+                        >
+                          Import{" "}
+                        </button>
+                      </div>
+                    )}
+                    {createNew && (
+                      <CreateNew
+                        onClose={() => setCreateNew(false)}
+                        onSetUpMySelf={() => {
+                          setCreateNew(false);
+                          setShowNewAccount(true);
+                        }}
+                      />
+                    )}
+                    {showNewAccount && (
+                      <NewAccounts onClose={() => setShowNewAccount(false)} />
+                    )}
+                  </div>
+                </div>
 
-            {/* Tabs */}
+                {/* Tabs */}
 
-            <div className="mt-8 flex items-center border-b">
-              {["All contacts", "My contacts", "Unassigned contacts"].map(
-                (tab, index) => (
-                  <button
-                    key={tab}
-                    className={`mr-8 pb-4 text-[13px] ${
-                      index === 0
-                        ? "border-b-2 border-black font-semibold"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    {tab}
+                <div className="mt-8 flex items-center border-b">
+                  {["All contacts", "My contacts", "Unassigned contacts"].map(
+                    (tab, index) => (
+                      <button
+                        key={tab}
+                        className={`mr-8 pb-4 text-[13px] ${
+                          index === 0
+                            ? "border-b-2 border-black font-semibold"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ),
+                  )}
+                  <button className="pb-4 cursor-pointer">
+                    <Plus size={16} />
                   </button>
-                ),
-              )}
-              <button className="pb-4 cursor-pointer">
-                <Plus size={16} />
-              </button>
-            </div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="mt-2 flex items-center justify-between">
