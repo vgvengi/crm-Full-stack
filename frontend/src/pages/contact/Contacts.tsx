@@ -9,19 +9,18 @@ import {
   Grid2X2,
   Settings,
   ChevronUp,
-  // ToolboxIcon,
-  // Flag,
-  // Building2,
 } from "lucide-react";
 import useClickOutSide from "@/hooks/useClickOutSide";
 import CreateNew from "./create-new/CreateNew";
 import NewAccounts from "./create-new/NewAccounts";
-import EditCompanies from "./EditCompanies";
+import EditCompanies from "./EditContacts";
 import ContactsTable from "./ContactsTable";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../ui/tooltip";
+import editCompanies from "./EditContacts";
+import { FaS } from "react-icons/fa6";
+import ContactsFooter from "./ContactsFooter";
 // import { data } from "react-router-dom";
-
-type Contact = {
+interface Contact {
   id: number;
   email: string;
   first_name: string;
@@ -29,11 +28,12 @@ type Contact = {
   phone?: string;
   company?: string;
   owner?: string;
-};
+}
 
 function Contacts() {
   // open setopen is for Create Account
   const [open, setOpen] = useState(false);
+
   // createNew setCreateNew control the visiblity of  creating Account state
   const [createNew, setCreateNew] = useState(false);
 
@@ -44,11 +44,17 @@ function Contacts() {
 
   // state for contact in table
   const [contacts, setContacts] = useState<Contact[]>([]);
+
   // state for checkbox selection
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
+
   const [selectedAll, setSelectedAll] = useState(false);
+
+  // for hiding the edit
+  const [hideEdit, setHideEdit] = useState(false);
   // Ref
   const ref = useRef<HTMLDivElement | null>(null);
+
   // Event Handling
   useClickOutSide(ref, () => {
     setOpen(false);
@@ -71,23 +77,36 @@ function Contacts() {
     setSelectedAll(checked);
     if (checked) {
       setSelectedContacts(contacts.map((contact) => contact.id));
+      setHideEdit(true);
     } else {
       setSelectedContacts([]);
+      setHideEdit(false);
     }
   };
 
   const handleCheckboxChange = (contactId: number) => {
-    setSelectedContacts((prev) =>
-      prev.includes(contactId)
+    setSelectedContacts((prev) => {
+      const updated = prev.includes(contactId)
         ? prev.filter((id) => id !== contactId)
-        : [...prev, contactId],
-    );
+        : [...prev, contactId];
+
+      setHideEdit(updated.length > 0);
+      return updated;
+    });
   };
 
+  const handleCloseEdit = () => {
+    // this will hide the editCompanies Component
+    setHideEdit(false);
+    // Uncheck all the selected contacts
+    setSelectedContacts([]);
+
+    setSelectedAll(false);
+  };
   return (
     <div className="mt-3">
       <div className="min-h-screen p-1">
-        <div className="mx-auto bg-white ">
+        <div className="mx-auto  flex-1 bg-white ">
           <div>
             {!isCollapase && (
               <>
@@ -237,12 +256,18 @@ function Contacts() {
               </Tooltip>
             </div>
           </div>
-          {/* Divider */}
+          {/*Divider */}
+
           {/* Table */}
-          <div>
-            <EditCompanies/>
-          </div>
-          <div className="overflow-x-auto rounded-xl border mt-4 ">
+          {hideEdit && (
+            <div>
+              <EditCompanies
+                count={selectedContacts.length}
+                onClose={handleCloseEdit}
+              />
+            </div>
+          )}
+          <div className="overflow-auto rounded-xl border mt-4 max-h-[60vh]">
             <ContactsTable
               selectedContacts={selectedContacts}
               onCheckboxChange={handleCheckboxChange}
@@ -250,6 +275,9 @@ function Contacts() {
               onSelectAll={handleSelectAll}
             />
           </div>
+        </div>
+        <div className="">
+          <ContactsFooter />
         </div>
       </div>
     </div>
