@@ -5,10 +5,9 @@ import CompanyForm from "./CompanyForm";
 
 export default function CompaniesHeader() {
   const [companyList, setCompanyList] = useState(false);
-  // const dropDown = useRef<HTMLDivElement |null>(null);
   const dropDown = useRef<HTMLDivElement | null>(null);
 
-  const [showForm , setShowForm]=useState(false);
+  const [showForm, setShowForm] = useState(false);
   const addCompanyList = [
     {
       id: 1,
@@ -36,7 +35,7 @@ export default function CompaniesHeader() {
   }, []);
 
   return (
-    <div className="flex items-center justify-between    ">
+    <div className="flex items-center justify-between">
       <div className="flex flex-row items-center">
         <h1 className=" text-2xl font-bold">Companies</h1>
         <FaCaretDown />
@@ -68,23 +67,24 @@ export default function CompaniesHeader() {
                   key={addList.id}
                   className="px-7 py-3 my-2 cursor-pointer
                hover:bg-[#EBEBEB]"
-               onClick={()=>{
-              if(addList.label ==="Create new"){
-                setShowForm(true);
-                setCompanyList(false);
-
-              }
-               }}
+                  onClick={() => {
+                    if (addList.label === "Create new") {
+                      setShowForm(true);
+                      setCompanyList(false);
+                    }
+                  }}
                 >
                   {addList.label}
                 </div>
               ))}
             </div>
           )}
-          {showForm &&(
-            <div className="fixed  max-w-none min-w-[300px]   
-   inset-0 z-50 flex flex-col  bg-white w-150 ms-auto shadow-2xl">
-              <CompanyForm onClose={()=>setShowForm(false)} />
+          {showForm && (
+            <div
+              className="fixed  max-w-none min-w-[300px]   
+   inset-0 z-50 flex flex-col  bg-white w-150 ms-auto shadow-2xl"
+            >
+              <CompanyForm onClose={() => setShowForm(false)} />
             </div>
           )}
         </div>
