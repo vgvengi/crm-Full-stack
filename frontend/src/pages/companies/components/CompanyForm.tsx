@@ -13,13 +13,25 @@ function CompanyForm({ onClose }: close) {
     phoneNumber: "",
     lastActivityDate: "",
     city: "",
+    stateRegion: "",
     CountryRegion: "",
     industry: "",
+    type: "",
+    postalCode: "",
+    numberOfEmployees: "",
+    annualRevenue: "",
+    timeZone: "",
+    description: "",
+    LinkedInCompanyPage: "",
   });
   const validate =
     data.companyDomainName.trim() !== "" || data.companyName.trim() !== "";
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // const { name, value } = e.target;
+    // setData((prev) => ({
+    //   ...prev,
+    //   [name]: value,
     const { name, value } = e.target;
     setData((prev) => ({
       ...prev,
@@ -36,14 +48,19 @@ function CompanyForm({ onClose }: close) {
         },
         body: JSON.stringify(data),
       });
-      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error(data.message || "Failed to create companies");
+        const text = await response.text().catch(() => null);
+        console.error("Create company failed:", response.status, text);
+        alert(text || `Request failed: ${response.status}`);
+        return;
       }
-      alert(data.message);
+
+      const resData = await response.json();
+      alert(resData.message || "Created");
       onClose();
     } catch (error) {
-      console.error(error);
+      console.error("Network or parsing error:", error);
       alert("Failed to create contact");
     }
   };
@@ -82,6 +99,7 @@ function CompanyForm({ onClose }: close) {
               className="h-8 border p-3"
               type="email"
               name="companyDomainName"
+              value={data.companyDomainName}
               onChange={handleChange}
             />
           </div>
@@ -92,6 +110,7 @@ function CompanyForm({ onClose }: close) {
               name="companyName"
               className="h-8 border"
               type="text"
+              value={data.companyName}
               onChange={handleChange}
             />
           </div>
@@ -110,6 +129,7 @@ function CompanyForm({ onClose }: close) {
                 name="companyOwner"
                 className="h-8 border"
                 type="text"
+                value={data.companyOwner}
                 onChange={handleChange}
               />
             </div>
@@ -122,6 +142,7 @@ function CompanyForm({ onClose }: close) {
                     name="industry"
                     className="h-8 border"
                     type="text"
+                    value={data.industry}
                     onChange={handleChange}
                   />
                 </div>
@@ -132,6 +153,7 @@ function CompanyForm({ onClose }: close) {
                     name="type"
                     className="h-8 border"
                     type="text"
+                    value={data.type}
                     onChange={handleChange}
                   />
                 </div>
@@ -142,6 +164,7 @@ function CompanyForm({ onClose }: close) {
                     name="city"
                     className="h-8 border"
                     type="text"
+                    value={data.city}
                     onChange={handleChange}
                   />
                 </div>
@@ -152,6 +175,7 @@ function CompanyForm({ onClose }: close) {
                     name="stateRegion"
                     className="h-8 border"
                     type="text"
+                    value={data.stateRegion}
                     onChange={handleChange}
                   />
                 </div>
@@ -162,6 +186,7 @@ function CompanyForm({ onClose }: close) {
                     name="postalCode"
                     className="h-8 border"
                     type="text"
+                    value={data.postalCode}
                     onChange={handleChange}
                   />
                 </div>
@@ -172,6 +197,7 @@ function CompanyForm({ onClose }: close) {
                     name="numberOfEmployees"
                     className="h-8 border"
                     type="text"
+                    value={data.numberOfEmployees}
                     onChange={handleChange}
                   />
                 </div>
@@ -182,6 +208,7 @@ function CompanyForm({ onClose }: close) {
                     name="annualRevenue"
                     className="h-8 border"
                     type="text"
+                    value={data.annualRevenue}
                     onChange={handleChange}
                   />
                 </div>
@@ -192,6 +219,7 @@ function CompanyForm({ onClose }: close) {
                     name="timeZone"
                     className="h-8 border"
                     type="text"
+                    value={data.timeZone}
                     onChange={handleChange}
                   />
                 </div>
@@ -202,6 +230,7 @@ function CompanyForm({ onClose }: close) {
                     name="description"
                     className="h-8 border"
                     type="text"
+                    value={data.description}
                     onChange={handleChange}
                   />
                 </div>
@@ -214,6 +243,7 @@ function CompanyForm({ onClose }: close) {
                     name="LinkedInCompanyPage"
                     className="h-8 border"
                     type="text"
+                    value={data.LinkedInCompanyPage}
                     onChange={handleChange}
                   />
                 </div>
@@ -226,11 +256,12 @@ function CompanyForm({ onClose }: close) {
       <footer className="flex flex-row gap-10">
         <div>
           <button
-            className={`p-3 border rounded-xl 
-           hover:bg-[#F0F0F0] ${!validate}? 
-          "cursor-pointer hover:bg-[#F0F0F0]"
-               : "cursor-not-allowed opacity-50 bg-gray-200" `}
-            disabled={validate}
+            className={`p-3 border rounded-xl ${
+              validate
+                ? "cursor-pointer hover:bg-[#F0F0F0]"
+                : "cursor-not-allowed opacity-50 bg-gray-200"
+            }`}
+            disabled={!validate}
             onClick={saveDataToBackEnd}
           >
             Create
@@ -238,8 +269,11 @@ function CompanyForm({ onClose }: close) {
         </div>
         <div>
           <button
-            className="p-3 border rounded-xl cursor-not-allowed
-           hover:bg-[#F0F0F0]"
+            className={`p-3 border rounded-xl cursor-not-allowed
+           hover:bg-[#F0F0F0] ${validate ?
+             "cursor-pointer hover:bg-[#F0F0F0]" 
+             : "cursor-not-allowed opacity-50 bg-gray-200"} 
+            `}
           >
             Create and Add
           </button>

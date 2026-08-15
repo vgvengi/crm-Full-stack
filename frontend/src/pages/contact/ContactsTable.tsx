@@ -14,7 +14,7 @@ type Contact = {
 };
 
 function ContactsTable({
-  selectedContacts  ,
+  selectedContacts,
   onCheckboxChange,
   selectedAll,
   onSelectAll,
@@ -56,9 +56,9 @@ function ContactsTable({
     <div>
       <div className="overflow-x-auto">
         <table className="min-w-[1500px] w-full border-separate [border-spacing:0_12px]">
-          <thead className="bg-[#cccccc] ">
+          <thead className="bg-[#cccccc] sticky">
             <tr>
-              <th className="flex items-center justify-center px-4 py-2">
+              <th className="flex items-center justify-center px-4 py-2 sticky top-0 bg-[#cccccc] z-20">
                 <input
                   type="checkbox"
                   className="w-5 h-5 cursor-pointer"
@@ -69,16 +69,16 @@ function ContactsTable({
               {columns.map((column) => (
                 <th
                   key={column.id}
-                  className="px-4 py-2 text-left text-[13px] font-semibold border-r-2 border-gray-400"
+                  className="px-4 py-2 text-left text-[13px] font-semibold border-r-2 border-gray-400 sticky top-0 bg-[#cccccc] z-10"
                 >
                   {column.label}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {contacts.map((contact) => (
-              <tr key={contact.id} className=" hover:bg-#4D4D4">
+              <tr key={contact.id} className="">
                 <td className="px-4 py-1 flex items-center justify-center">
                   <input
                     type="checkbox"
@@ -92,17 +92,13 @@ function ContactsTable({
                 </td>
                 <td className="text-[#006162] underline">{contact.email}</td>
 
-                <td className="text-[#006162] underlined">
+                <td className="text-[#006162] underline">
                   {contact.phoneNumber}
                 </td>
 
                 <td>{contact.contactOwner}</td>
                 <td>-</td>
-
-                {/* <td>{contact.leadStatus}</td> */}
-
                 <td>-</td>
-
                 <td>-</td>
               </tr>
             ))}

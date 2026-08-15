@@ -10,10 +10,14 @@ type createNewProp = {
 
 function CreateNew({ onClose, onSetUpMySelf }: createNewProp) {
   return (
-    <div className="fixed inset-0 z-100 flex flex-col items-center 
-    justify-center bg-black/40 backdrop-blur-sm">
-      <div className="w-250 rounded-xl bg-white shadow-2xl flex flex-col 
-      items-center py-2 px-4">
+    <div
+      className="fixed inset-0 z-100 flex flex-col items-center 
+    justify-center bg-black/40 backdrop-blur-sm"
+    >
+      <div
+        className="w-250 rounded-xl bg-white shadow-2xl flex flex-col 
+      items-center py-2 px-4"
+      >
         <div className="w-full flex flex-row mt-5 mb-5">
           <h2 className="text-4xl ml-72">Create Your First Contact</h2>
           <button
@@ -28,8 +32,10 @@ function CreateNew({ onClose, onSetUpMySelf }: createNewProp) {
           store.
         </p>
         <div className="flex flex-row justify-center gap-3 py-7">
-          <div className="border w-[209px] flex flex-col items-center 
-          cursor-pointer">
+          <div
+            className="border w-[209px] flex flex-col items-center 
+          cursor-pointer"
+          >
             <img className="h-50 w-50" src={operationCustom} alt="Image" />
             <p className="text-[16px] font-bold">Help me get Started</p>
           </div>

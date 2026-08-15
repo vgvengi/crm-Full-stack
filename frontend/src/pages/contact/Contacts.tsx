@@ -204,7 +204,10 @@ function Contacts() {
                 <Search size={20} />
               </div>
 
-              <button className="flex items-center gap-2 rounded-full border px-3">
+              <button
+                className="flex items-center gap-2 rounded-full border px-3"
+                onClick={() => setHideEdit((prev) => !prev)}
+              >
                 <Filter size={18} />
                 <p className="text-[13px]">Filter</p>
               </button>

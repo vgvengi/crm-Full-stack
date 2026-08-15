@@ -16,15 +16,18 @@ export default function CompaniesTableRow() {
     { id: 2, label: "Company owner" },
     { id: 3, label: "Create date" },
     { id: 4, label: "Phone number" },
-    { id: 5, label: "Last activity date" },
+    { id: 5, label: "Last Activity Date" },
+    { id: 6, label: "City" },
+    { id: 7, label: "Country/Region" },
+    { id: 8, label: "Industry" },
   ];
   const [showData, setShowData] = useState<dataType[]>([]);
   // fetchData is used for fetching data from backend
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/companies");
-      if(!response.ok){
-        throw new Error("Failed to fetch companies")
+      if (!response.ok) {
+        throw new Error("Failed to fetch companies");
       }
       const data = await response.json();
       setShowData(data);

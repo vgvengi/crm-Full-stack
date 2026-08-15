@@ -23,28 +23,28 @@ function NewAccounts({ onClose }: NewAccountsProps) {
     formData.lastName.trim() != "";
   // const handleCreate = async () => {};
   const handleCreate = async () => {
-  try {
-    const response = await fetch("http://localhost:5000/api/contacts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch("http://localhost:5000/api/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to create contact");
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to create contact");
+      }
+
+      alert(data.message);
+      onClose(); // Close the modal after successful creation
+    } catch (error) {
+      console.error(error);
+      alert("Failed to create contact");
     }
-
-    alert(data.message);
-    onClose(); // Close the modal after successful creation
-  } catch (error) {
-    console.error(error);
-    alert("Failed to create contact");
-  }
-};
+  };
   // console.log(canContinue);
   useEffect(() => {
     const timer = setTimeout(() => {

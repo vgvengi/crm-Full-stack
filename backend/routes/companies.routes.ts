@@ -1,4 +1,4 @@
-import  express, { Request, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 import db from "../config/db";
 import { ResultSetHeader } from "mysql2";
 
@@ -13,34 +13,28 @@ router.post("/", async (req: Request, res: Response) => {
     companyDomainName,
     companyName,
     companyOwner,
-    dateCreated,
     phoneNumber,
-    lastActivityDate,
     city,
-    CountryRegion,
+    stateRegion,
     industry,
   } = req.body;
 
   const sql = ` INSERT INTO companies ( companyDomainName, companyName,
         companyOwner,
-        dateCreated,
         phoneNumber,
-        lastActivityDate,
         city,
-        CountryRegion,
+        stateRegion,
         industry)
-        VALUES(?,?,?,?,?,?,?,?,?)`;
+        VALUES(?,?,?,?,?,?,?)`;
 
   try {
     const [result] = await db.query<ResultSetHeader>(sql, [
       companyDomainName,
       companyName,
       companyOwner,
-      dateCreated,
       phoneNumber,
-      lastActivityDate,
       city,
-      CountryRegion,
+      stateRegion,
       industry,
     ]);
 
@@ -58,15 +52,15 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/",async(req:Request,res:Response)=>{
-  console.log("GET/api/companies called")
-  try{
-    const [rows]= await db.query("SELECT * FROM companies");
+router.get("/", async (req: Request, res: Response) => {
+  console.log("GET/api/companies called");
+  try {
+    const [rows] = await db.query("SELECT * FROM companies");
     res.json(rows);
-  }catch(error){
+  } catch (error) {
     res.status(500).json({
-      message:"Faild to get companies"
-    })
+      message: "Faild to get companies",
+    });
   }
-})
-export default router
+});
+export default router;
