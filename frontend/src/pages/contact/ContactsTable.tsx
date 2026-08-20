@@ -25,7 +25,9 @@ function ContactsTable({
   onSelectAll: (checked: boolean) => void;
 }) {
   const [contacts, setContacts] = useState<Contact[]>([]);
-
+//editingContactId,setEditingContactId is row row edit 
+// it will help to save the row id for any change 
+  const [editingContactId, setEditingContactId] = useState<number | null>(null);
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/contacts");
@@ -84,7 +86,10 @@ function ContactsTable({
                     type="checkbox"
                     className="w-5 h-5 cursor-pointer"
                     checked={selectedContacts.includes(contact.id)}
-                    onChange={() => onCheckboxChange(contact.id)}
+                    onChange={() => {onCheckboxChange(contact.id);
+                      setEditingContactId(contact.id);
+                    }
+                    }
                   />
                 </td>
                 <td className="text-[#006162] underline">
