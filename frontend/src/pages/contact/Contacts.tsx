@@ -104,8 +104,8 @@ function Contacts() {
     setSelectedAll(false);
   };
   return (
-    <div className="mt-3">
-      <div className="min-h-screen p-1">
+    <div className="mt-3   border-2 shadow-2xl h-full rounded-2xl">
+      <div className="min-h-screen p-2">
         <div className="mx-auto  flex-1 bg-white ">
           <div>
             {!isCollapase && (
