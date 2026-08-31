@@ -2,6 +2,16 @@
 import { IoCloseOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 import { FaRegCircle } from "react-icons/fa";
+import {
+  FaRegClock,
+  FaInfoCircle,
+  FaBold,
+  FaItalic,
+  FaUnderline,
+  FaStrikethrough,
+  FaLink,
+  FaRegImage,
+} from "react-icons/fa";
 type NewTaskListProps ={
     onClose :()=>void;
 }
@@ -106,10 +116,59 @@ function NewTaskList({onClose}:NewTaskListProps) {
         <div>
           <label className="font-semibold">Due date</label>
 
-          <input
-            type="date"
-            className="mt-2 w-full rounded border px-4 py-3 outline-none"
-          />
+          <div className="mt-2 flex gap-2">
+            <button className="flex flex-1 items-center justify-between rounded border px-4 py-3">
+              <span>In 3 business days (Thursday)</span>
+              <FaChevronDown />
+            </button>
+
+            <button className="flex items-center justify-center rounded border px-4 py-3">
+              <FaRegClock />
+            </button>
+          </div>
+        </div>
+
+        {/* Set to repeat */}
+        <div className="flex items-center gap-2">
+          <input type="checkbox" disabled className="h-4 w-4" />
+          <span className="text-gray-400">Set to repeat</span>
+          <FaInfoCircle className="text-gray-400" />
+        </div>
+
+        {/* Reminder */}
+        <div>
+          <label className="font-semibold">Reminder</label>
+
+          <button className="mt-2 flex w-full items-center justify-between rounded border px-4 py-3">
+            <span>No reminder</span>
+            <FaChevronDown />
+          </button>
+        </div>
+
+        {/* Notes */}
+        <div>
+          <label className="font-semibold">Notes</label>
+
+          <div className="mt-2 rounded border">
+            <textarea
+              rows={5}
+              className="w-full resize-none px-4 py-3 outline-none"
+            />
+
+            <div className="flex items-center gap-3 border-t px-4 py-2 text-gray-600">
+              <FaBold className="cursor-pointer" />
+              <FaItalic className="cursor-pointer" />
+              <FaUnderline className="cursor-pointer" />
+              <FaStrikethrough className="cursor-pointer" />
+
+              <button className="flex items-center gap-1 font-semibold cursor-pointer">
+                More <FaChevronDown size={12} />
+              </button>
+
+              <FaLink className="cursor-pointer" />
+              <FaRegImage className="cursor-pointer" />
+            </div>
+          </div>
         </div>
 
       </div>
