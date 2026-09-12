@@ -1,5 +1,6 @@
 import  express, { Router }  from "express";
 import cors from "cors";
+import errorHandler 
 import contactRouter from "./routes/contacts.routes";
 import companyRouter from "./routes/companies.routes"
 const router:Router =express.Router();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use("/api/contacts",contactRouter)
 app.use("/api/companies",companyRouter)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
