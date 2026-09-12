@@ -28,22 +28,22 @@ function TopNav() {
   });
   return (
     <div className="h-full w-full flex items-center px-4">
-      <div ref={ref} className="flex flex-row">
+      <div ref={ref} className="flex flex-row flex-1 min-w-0 max-w-100">
         <div
-          className=" flex flex-row items-center  rounded-2xl border w-100 h-8 cursor-pointer 
-      ml-14 border-0.1 hover:bg-[#4D4D4D]"
+          className=" flex flex-row items-center  rounded-2xl border w-full h-8 cursor-pointer 
+      ml-3 sm:ml-10 md:ml-14 border-0.1 hover:bg-[#4D4D4D]"
         >
           <input
-            className="outline-none mx-2 my-1 w-80 placeholder-white"
+            className="outline-none mx-2 my-1 w-full min-w-0 placeholder-white"
             type="text"
             placeholder="Find or Ask "
             onClick={() => setSearchOpen((prev) => !prev)}
           />
-          <CiSearch className="ms-auto mr-2" size={20} color="white" />
+          <CiSearch className="ms-auto mr-2 shrink-0" size={20} color="white" />
         </div>
         {searchOpen && (
           <div
-            className="bg-white w-146 h-full shadow-2xl left-15 
+            className="bg-white w-[90vw] max-w-146 h-full shadow-2xl left-4 sm:left-15 
             inset-0 z-50 fixed
         rounded-2xl"
           >
@@ -91,14 +91,14 @@ function TopNav() {
         )}
       </div>
 
-      <div className="flex ms-auto">
-        <div className="flex flex-row items-center gap-2 mr-2">
+      <div className="flex ms-auto shrink-0">
+        <div className="hidden lg:flex flex-row items-center gap-2 mr-2">
           <GrUpgrade color="white" />
           <p className="text-white">Upgrade</p>
         </div>
       </div>
-      <div className="w-0.5 h-8 bg-[#4D4D4D] mx-2 "></div>
-      <div className="flex flex-row">
+      <div className="hidden lg:block w-0.5 h-8 bg-[#4D4D4D] mx-2 "></div>
+      <div className="flex flex-row shrink-0">
         {topNavItems.map((topmenu) => {
           const Icon = topmenu.icon;
           return (
@@ -112,15 +112,15 @@ function TopNav() {
       </div>
       <div className="w-0.5 h-8 bg-[#4D4D4D] mx-2 "></div>
 
-      <div>
-        <button className=" flex flex-row items-center gap-3 p-6 cursor-pointer">
+      <div className="shrink-0">
+        <button className=" flex flex-row items-center gap-3 px-3 sm:px-6 py-6 cursor-pointer">
           <PiStarFourFill color="white" />
-          <p className="text-white">Assistant</p>
+          <p className="hidden sm:inline text-white">Assistant</p>
         </button>
       </div>
-      <div className="w-0.5 h-8 bg-[#4D4D4D] mx-2 "></div>
+      <div className="hidden md:block w-0.5 h-8 bg-[#4D4D4D] mx-2 "></div>
 
-      <div>
+      <div className="hidden md:block">
         <p
           className="p-6
         text-white"
