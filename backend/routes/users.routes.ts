@@ -35,7 +35,7 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     const hashedPassword = await argon2.hash(password);
     const [result] = await db.query<ResultSetHeader>(
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+      "INSERT INTO users (user_name, user_email, password_hash) VALUES (?, ?, ?)",
       [name.trim(), normalizedEmail, hashedPassword]
     );
 
