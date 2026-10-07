@@ -7,12 +7,16 @@ import Deals from "@/pages/deals/Deals";
 import Restore from "@/pages/deals/editsDeals/Restore";
 import EditProperties from "@/pages/deals/editsDeals/EditProperties";
 import GeneralProperty from "@/pages/deals/editsDeals/general/GeneralProperty";
+import LoginPage from "@/pages/loginPage/LoginPage";
+import SignUpPage from "@/pages/signUpPage/SignUpPage";
 
 export default function routes() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Dashboard />}>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="sign-up" element={<SignUpPage />} />
+        <Route path="dashboard" element={<Dashboard />}>
           <Route index element={<Home />} />
           <Route path="contacts" element={<Contacts />} />
           <Route path="companies" element={<Companies />} />
