@@ -1,15 +1,45 @@
 import { type FormEvent, useState } from "react";
 import { FiArrowRight, FiLock, FiMail } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate("/");
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      });
+      const data: { message?: string; success?: boolean } = await response
+        .json()
+        .catch(() => ({}));
+
+      if (!response.ok || !data.success) {
+        setError(data.message ?? "Unable to log in. Please try again.");
+        return;
+      }
+
+      navigate("/dashboard");
+    } catch (requestError) {
+      console.error("Login request failed:", requestError);
+      setError("Unable to connect to the server. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -88,7 +118,7 @@ export default function LoginPage() {
             >
               <span>Email address</span>
               <span
-                className="flex h-12 items-center gap-3 rounded-lg
+                className="flex mt-2 h-12 items-center gap-3 rounded-lg
                border border-slate-300 bg-white px-4 transition 
                focus-within:border-[#0b7a75] focus-within:ring-2
                 focus-within:ring-[#0b7a75]/20"
@@ -108,9 +138,9 @@ export default function LoginPage() {
               </span>
             </label>
 
-            <label className="block space-y-2 text-sm font-semibold text-slate-800">
+            <label className=" block w-full space-y-2 text-sm font-semibold text-slate-800">
               <span>Password</span>
-              <span className="flex h-12 items-center gap-3 rounded-lg border border-slate-300 bg-white px-4 transition focus-within:border-[#0b7a75] focus-within:ring-2 focus-within:ring-[#0b7a75]/20">
+              <span className="flex mt-2 h-12 items-center gap-3 rounded-lg border border-slate-300 bg-white px-4 transition focus-within:border-[#0b7a75] focus-within:ring-2 focus-within:ring-[#0b7a75]/20">
                 <FiLock className="shrink-0 text-slate-500" size={18} />
                 <input
                   autoComplete="current-password"
@@ -118,9 +148,15 @@ export default function LoginPage() {
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="Enter your password"
                   required
-                  type="password"
+                  type={passwordVisible ? "text":"password"}
                   value={password}
                 />
+                <button
+                onClick={()=>setPasswordVisible((currentValue)=>!currentValue)}
+                type="button"
+                > 
+                  {passwordVisible ?<FaEyeSlash/>:<FaEye/>}
+                </button>
               </span>
             </label>
 
@@ -137,11 +173,18 @@ export default function LoginPage() {
               </a>
             </div>
 
+            {error && (
+              <p aria-live="polite" className="text-sm font-medium text-red-600">
+                {error}
+              </p>
+            )}
+
             <button
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0b5f5a] font-semibold text-white transition hover:bg-[#084d49] focus:outline-none focus:ring-2 focus:ring-[#0b7a75] focus:ring-offset-2"
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0b5f5a] font-semibold text-white transition hover:bg-[#084d49] focus:outline-none focus:ring-2 focus:ring-[#0b7a75] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
+              disabled={isSubmitting}
               type="submit"
             >
-              Sign in <FiArrowRight size={18} />
+              {isSubmitting ? "Signing in..." : "Sign in"} <FiArrowRight size={18} />
             </button>
           </form>
 
