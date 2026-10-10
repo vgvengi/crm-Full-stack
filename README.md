@@ -1,47 +1,110 @@
-# HubSpot Clone
+# HubSpot CRM Clone
 
-A full-stack HubSpot CRM clone built with React, TypeScript, Tailwind CSS and Express/MySQL — featuring Contacts, Companies, and Deals modules with pipeline views, bulk actions, and a HubSpot-style dashboard UI.
+A portfolio full-stack CRM application inspired by HubSpot. It provides a responsive sales workspace for managing contacts and companies, viewing a deals pipeline, and signing up or logging in to the application.
 
-## Overview
+> This is an independent learning project and is not affiliated with, endorsed by, or connected to HubSpot.
 
-**HubSpot Clone** is a full-stack CRM web application that recreates the core UI/UX and workflows of HubSpot's CRM (Contacts, Companies, Deals, and Home dashboard), built as a learning/portfolio project with a React + TypeScript frontend and a Node.js/Express + MySQL backend.
+## Highlights
+
+- Responsive CRM dashboard with sidebar navigation and a top navigation bar
+- Contact and company tables backed by a MySQL database
+- Create-contact and create-company forms
+- Contact search, selection, and client-side table interactions
+- Deals pipeline view driven by database-configured deal stages
+- Signup and login endpoints with Argon2 password hashing
+- React client routing with protected dashboard routes
+- Reusable UI components, tooltips, and custom hooks
 
 ## Tech Stack
 
-- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS v4, React Router v7, Radix UI (Tooltip), shadcn-style UI components, react-icons / lucide-react
-- **Backend:** Node.js, Express, TypeScript, MySQL (via `mysql2`), CORS, dotenv
-- **Architecture:** Monorepo with separate `frontend/` and `backend/` workspaces
-
-## Key Features
-
-- **Dashboard Shell** — HubSpot-style layout with a collapsible side nav, top bar (global search, quick-create, assistant shortcut), and routed content area
-- **Home** — Personalized greeting, "prep for meetings" card, sales pipeline onboarding cards, and a task list widget
-- **Contacts** — Sortable/filterable contact table backed by MySQL, tabbed views (All/My/Unassigned contacts), create-contact drawer with email validation, row selection with bulk **Assign / Edit / Delete** actions
-- **Companies** — Company table with live data fetch, create-company form modal, and footer actions (Export, Clone, Refresh)
-- **Deals** — Kanban/table view toggle, "All deals" / "My deals" tabs, deal property management (Edit Properties, Settings sidebar), restore deleted records, and calling settings page
-- **Reusable UI Kit** — Custom hooks (`useClickOutSide`), shared Tooltip component, and consistent Tailwind-based styling across modules
-- **REST API** — Express routes for `/api/contacts` and `/api/companies` with MySQL-backed create/read operations
+| Area | Technologies |
+| --- | --- |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, React Router v7 |
+| UI | Radix UI, Lucide React, React Icons, shadcn-style components |
+| Backend | Node.js, Express, TypeScript |
+| Database | MySQL with `mysql2` |
+| Authentication | Argon2 password hashing |
 
 ## Project Structure
 
+```text
+.
+|-- backend/                 # Express API and MySQL integration
+|   |-- config/              # Database pool configuration
+|   |-- middleware/          # Shared Express middleware
+|   `-- routes/              # Contacts, companies, deals, signup, and login APIs
+|-- frontend/                # React + Vite application
+|   `-- src/
+|       |-- components/      # Shared UI and dashboard components
+|       |-- layouts/         # Application layouts
+|       |-- pages/           # Contacts, companies, deals, auth, and home pages
+|       `-- routes/          # Client-side routes
+`-- README.md
 ```
-backend/     # Express + TypeScript API server (MySQL)
-frontend/    # React + TypeScript + Vite client
-```
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `POST` | `/api/users` | Create a user account |
+| `POST` | `/api/auth/login` | Validate user credentials |
+| `GET` | `/api/contacts` | List contacts |
+| `POST` | `/api/contacts` | Create a contact |
+| `GET` | `/api/companies` | List companies |
+| `POST` | `/api/companies` | Create a company |
+| `GET` | `/api/dealsStages/deals-stage` | List pipeline stages |
 
 ## Getting Started
 
-### Backend
+### Prerequisites
+
+- Node.js 20 or later
+- npm
+- MySQL 8 or later
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/<your-github-username>/crm-Full-stack.git
+cd crm-Full-stack
+```
+
+### 2. Configure the database
+
+Create a `backend/.env` file:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=hubspot_crm
+DB_PORT=3306
+DB_CONNECTION_LIMIT=10
+PORT=5000
+```
+
+Create the MySQL database and the tables expected by the current API:
+
+- `users` with `user_name`, `user_email`, and `password_hash`
+- `contacts` with the fields submitted from the contact form
+- `companies` with the fields submitted from the company form
+- `deal_stages_array` with `stages`, `stages_position`, and `deal_stage_color`
+
+Database migrations and seed scripts are planned improvements.
+
+### 3. Start the backend
 
 ```bash
 cd backend
 npm install
-npm run dev
+npx tsx server.ts
 ```
 
-Configure a `.env` file with your MySQL connection details (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_PORT`, `PORT`).
+The API starts at `http://localhost:5000`.
 
-### Frontend
+### 4. Start the frontend
+
+In another terminal:
 
 ```bash
 cd frontend
@@ -49,6 +112,32 @@ npm install
 npm run dev
 ```
 
-## Status
+Open the local URL displayed by Vite, typically `http://localhost:5173`.
 
-Actively in development — a hands-on clone project focused on replicating real-world CRM UX patterns (data tables, modals, bulk actions, kanban boards) with a scalable full-stack architecture.
+## Current Status
+
+The project is actively being developed. The following functionality is currently implemented:
+
+- User signup and credential verification
+- MySQL-backed contact and company creation/listing
+- Deals pipeline-stage retrieval
+- CRM dashboard and core screens
+
+### Planned Improvements
+
+- Server-enforced authentication with sessions or tokens
+- Persistent deal CRUD and drag/drop stage movement
+- Contact/company update and delete APIs
+- Complete bulk contact actions
+- Database migrations and demo seed data
+- Automated tests and continuous integration
+- Production deployment configuration
+
+## Important Notes
+
+- Protected frontend routes currently use a client-side `localStorage` flag. They are a UI guard, not a replacement for server-side authorization.
+- The application is intended as a portfolio and learning project. Do not use it to store real production customer data.
+
+## Author
+
+Built by **V. G. Vengi** as a full-stack React, TypeScript, Express, and MySQL portfolio project.
