@@ -4,9 +4,9 @@ import errorHandler from "./middleware/errorHandler";
 import contactRouter from "./routes/contacts.routes";
 import companyRouter from "./routes/companies.routes";
 import dealsRouter from "./routes/deals-pipe-line.routes";
-import userRouter from "./routes/users.routes";
-// import users from "./routes/users.routes";
-// import router from "./routes/users.routes";
+import userSignUpRouter from "./routes/users.signup.routes";
+import userLoginRouter from "./routes/users.login.routes";
+
 require("dotenv").config();
 
 const app = express();
@@ -17,7 +17,8 @@ app.use(express.json());
 app.use("/api/contacts", contactRouter);
 app.use("/api/companies", companyRouter);
 app.use("/api/dealsStages", dealsRouter);
-app.use("/api/users",userRouter);
+app.use("/api/users",userSignUpRouter);
+app.use("/api/auth", userLoginRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
