@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GoPlus } from "react-icons/go";
-import NewTaskList from "./NewTaskList";
+import NewTaskList from "../../pages/home/components/NewTaskList";
 
 
 export default function Tasks() {
