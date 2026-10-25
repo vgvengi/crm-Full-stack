@@ -1,45 +1,57 @@
-# HubSpot CRM Clone
+# CRM Workspace — Full-Stack Sales CRM
 
-A portfolio full-stack CRM application inspired by HubSpot. It provides a responsive sales workspace for managing contacts and companies, viewing a deals pipeline, and signing up or logging in to the application.
+A full-stack CRM inspired by HubSpot, built with **React 19, TypeScript, Express and MySQL**. It lets a sales user manage contacts and companies, view a deals pipeline whose stages come from the database, and sign up / log in with Argon2-hashed passwords.
 
-> This is an independent learning project and is not affiliated with, endorsed by, or connected to HubSpot.
+> Independent learning project. Not affiliated with, endorsed by, or connected to HubSpot.
 
-## Highlights
+<!--
+  ADD THESE AS SOON AS THEY EXIST — they matter more to a recruiter than anything below:
+  **Live demo:** https://...   (demo login: demo@example.com / ...)
+  ![Contacts page](docs/screenshots/contacts.png)
+  ![Deals pipeline](docs/screenshots/deals.png)
+-->
 
-- Responsive CRM dashboard with sidebar navigation and a top navigation bar
-- Contact and company tables backed by a MySQL database
-- Create-contact and create-company forms
-- Contact search, selection, and client-side table interactions
-- Deals pipeline view driven by database-configured deal stages
-- Signup and login endpoints with Argon2 password hashing
-- React client routing with protected dashboard routes
-- Reusable UI components, tooltips, and custom hooks
+## Features
+
+- **Contacts** — list contacts from MySQL, create new contacts, search and select rows in the table
+- **Companies** — list companies from MySQL, create new companies
+- **Deals pipeline** — pipeline columns, order and colours are read from a `deal_stages_array` table, so stages can change without a code change
+- **Authentication** — signup and login API with passwords hashed using Argon2
+- **Dashboard UI** — responsive layout with sidebar and top navigation, built with Tailwind CSS v4 and Radix UI primitives
+- **Routing** — React Router v7 with a guarded dashboard area (see [Known limitations](#known-limitations))
 
 ## Tech Stack
 
 | Area | Technologies |
 | --- | --- |
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, React Router v7 |
-| UI | Radix UI, Lucide React, React Icons, shadcn-style components |
+| UI | Radix UI, shadcn-style components, Lucide React, React Icons |
 | Backend | Node.js, Express, TypeScript |
-| Database | MySQL with `mysql2` |
-| Authentication | Argon2 password hashing |
+| Database | MySQL 8 with `mysql2` connection pool |
+| Security | Argon2 password hashing |
+
+## Technical Decisions
+
+- **Argon2 for password hashing** — a memory-hard algorithm designed to resist GPU brute-force attacks; plain-text passwords are never stored.
+- **Pipeline stages stored in the database** — stage name, position and colour live in a table instead of being hard-coded in the frontend, so the pipeline is configurable.
+- **Connection pool** — `mysql2` pool with the limit set from `DB_CONNECTION_LIMIT`, so requests reuse connections instead of opening a new one each time.
+- **Frontend / backend split** — separate `frontend/` and `backend/` apps so each can be deployed independently.
 
 ## Project Structure
 
 ```text
 .
-|-- backend/                 # Express API and MySQL integration
-|   |-- config/              # Database pool configuration
-|   |-- middleware/          # Shared Express middleware
-|   `-- routes/              # Contacts, companies, deals, signup, and login APIs
-|-- frontend/                # React + Vite application
-|   `-- src/
-|       |-- components/      # Shared UI and dashboard components
-|       |-- layouts/         # Application layouts
-|       |-- pages/           # Contacts, companies, deals, auth, and home pages
-|       `-- routes/          # Client-side routes
-`-- README.md
+├── backend/                 # Express API + MySQL
+│   ├── config/              # Database pool configuration
+│   ├── middleware/          # Shared Express middleware
+│   └── routes/              # Contacts, companies, deal stages, signup, login
+├── frontend/                # React + Vite app
+│   └── src/
+│       ├── components/      # Shared UI and dashboard components
+│       ├── layouts/         # App layouts
+│       ├── pages/           # Contacts, companies, deals, auth, home
+│       └── routes/          # Client-side routes
+└── README.md
 ```
 
 ## API Endpoints
@@ -47,7 +59,7 @@ A portfolio full-stack CRM application inspired by HubSpot. It provides a respon
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | `POST` | `/api/users` | Create a user account |
-| `POST` | `/api/auth/login` | Validate user credentials |
+| `POST` | `/api/auth/login` | Verify user credentials |
 | `GET` | `/api/contacts` | List contacts |
 | `POST` | `/api/contacts` | Create a contact |
 | `GET` | `/api/companies` | List companies |
@@ -58,20 +70,29 @@ A portfolio full-stack CRM application inspired by HubSpot. It provides a respon
 
 ### Prerequisites
 
-- Node.js 20 or later
+- Node.js 20+
 - npm
-- MySQL 8 or later
+- MySQL 8+
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-github-username>/crm-Full-stack.git
+git clone https://github.com/vgvengi/crm-Full-stack.git
 cd crm-Full-stack
 ```
 
-### 2. Configure the database
+### 2. Set up the database
 
-Create a `backend/.env` file:
+Create a database named `hubspot_crm` with these tables:
+
+| Table | Columns |
+| --- | --- |
+| `users` | `user_name`, `user_email`, `password_hash` |
+| `contacts` | fields submitted by the contact form |
+| `companies` | fields submitted by the company form |
+| `deal_stages_array` | `stages`, `stages_position`, `deal_stage_color` |
+
+Then create `backend/.env`:
 
 ```env
 DB_HOST=localhost
@@ -83,16 +104,7 @@ DB_CONNECTION_LIMIT=10
 PORT=5000
 ```
 
-Create the MySQL database and the tables expected by the current API:
-
-- `users` with `user_name`, `user_email`, and `password_hash`
-- `contacts` with the fields submitted from the contact form
-- `companies` with the fields submitted from the company form
-- `deal_stages_array` with `stages`, `stages_position`, and `deal_stage_color`
-
-Database migrations and seed scripts are planned improvements.
-
-### 3. Start the backend
+### 3. Run the backend
 
 ```bash
 cd backend
@@ -100,11 +112,11 @@ npm install
 npx tsx server.ts
 ```
 
-The API starts at `http://localhost:5000`.
+API runs at `http://localhost:5000`.
 
-### 4. Start the frontend
+### 4. Run the frontend
 
-In another terminal:
+In a second terminal:
 
 ```bash
 cd frontend
@@ -112,32 +124,24 @@ npm install
 npm run dev
 ```
 
-Open the local URL displayed by Vite, typically `http://localhost:5173`.
+Open the URL Vite prints (usually `http://localhost:5173`).
 
-## Current Status
+## Known Limitations
 
-The project is actively being developed. The following functionality is currently implemented:
+- **Auth is not enforced on the server yet.** The dashboard guard uses a `localStorage` flag on the client, and API routes do not check a session or token. This is the next thing being built.
+- Deals are displayed but not yet created, edited or moved between stages.
+- Contacts and companies support create and list only (no update or delete yet).
+- No automated tests or deployment yet.
 
-- User signup and credential verification
-- MySQL-backed contact and company creation/listing
-- Deals pipeline-stage retrieval
-- CRM dashboard and core screens
+## Roadmap
 
-### Planned Improvements
-
-- Server-enforced authentication with sessions or tokens
-- Persistent deal CRUD and drag/drop stage movement
-- Contact/company update and delete APIs
-- Complete bulk contact actions
-- Database migrations and demo seed data
-- Automated tests and continuous integration
-- Production deployment configuration
-
-## Important Notes
-
-- Protected frontend routes currently use a client-side `localStorage` flag. They are a UI guard, not a replacement for server-side authorization.
-- The application is intended as a portfolio and learning project. Do not use it to store real production customer data.
+1. Server-side authentication (JWT in an httpOnly cookie) with middleware protecting all CRM routes
+2. Deal CRUD with drag-and-drop between pipeline stages
+3. Update / delete for contacts and companies
+4. `schema.sql` and seed data so the project runs with one command
+5. Tests and deployment with a public demo
 
 ## Author
 
-Built by **V. G. Vengi** as a full-stack React, TypeScript, Express, and MySQL portfolio project.
+**Vengatesh VG** — Full-stack developer (React, TypeScript, Node.js, Express, MySQL)
+GitHub: [@vgvengi](https://github.com/vgvengi)
