@@ -16,9 +16,8 @@ import NewAccounts from "./create-new/NewAccounts";
 import EditCompanies from "./EditContacts";
 import ContactsTable from "./ContactsTable";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../ui/tooltip";
-import editCompanies from "./EditContacts";
-import { FaS } from "react-icons/fa6";
-import ContactsFooter from "./ContactsFooter";
+// import editCompanies from "./EditContacts";
+// import { FaS } from "react-icons/fa6";
 // import { data } from "react-router-dom";
 interface Contact {
   id: number;
@@ -52,6 +51,12 @@ function Contacts() {
 
   // for hiding the edit
   const [hideEdit, setHideEdit] = useState(false);
+
+  // search query typed by the user to filter the table by name/email
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // which contacts tab is active: "all" | "my" | "unassigned"
+  const [activeTab, setActiveTab] = useState<"all" | "my" | "unassigned">("all");
   // Ref
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -104,8 +109,8 @@ function Contacts() {
     setSelectedAll(false);
   };
   return (
-    <div className="mt-3   border-2 shadow-2xl h-full rounded-2xl">
-      <div className="min-h-screen p-2">
+    <div className="border-2 shadow-2xl h-full w-full rounded-2xl">
+      <div className="h-full p-2 flex flex-col">
         <div className="mx-auto  flex-1 bg-white ">
           <div>
             {!isCollapase && (
@@ -170,20 +175,25 @@ function Contacts() {
                 {/* Tabs */}
 
                 <div className="mt-8 flex items-center border-b">
-                  {["All contacts", "My contacts", "Unassigned contacts"].map(
-                    (tab, index) => (
-                      <button
-                        key={tab}
-                        className={`mr-8 pb-4 text-[13px] ${
-                          index === 0
-                            ? "border-b-2 border-black font-semibold"
-                            : "text-gray-600"
-                        }`}
-                      >
-                        {tab}
-                      </button>
-                    ),
-                  )}
+                  {(
+                    [
+                      { label: "All contacts", value: "all" },
+                      { label: "My contacts", value: "my" },
+                      { label: "Unassigned contacts", value: "unassigned" },
+                    ] as const
+                  ).map((tab) => (
+                    <button
+                      key={tab.value}
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`mr-8 pb-4 text-[13px] cursor-pointer ${
+                        activeTab === tab.value
+                          ? "border-b-2 border-black font-semibold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
                   <button className="pb-4 cursor-pointer">
                     <Plus size={16} />
                   </button>
@@ -200,6 +210,8 @@ function Contacts() {
                 <input
                   placeholder="Search ( / )"
                   className="flex-1 outline-none w-full"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Search size={20} />
               </div>
@@ -276,12 +288,12 @@ function Contacts() {
               onCheckboxChange={handleCheckboxChange}
               selectedAll={selectedAll}
               onSelectAll={handleSelectAll}
+              searchQuery={searchQuery}
+              activeTab={activeTab}
             />
           </div>
         </div>
-        <div className="">
-          <ContactsFooter />
-        </div>
+   
       </div>
     </div>
   );
