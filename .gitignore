@@ -1,6 +1,12 @@
 #backend
-backend/.env
+backend/local.env
+backend/tidb.env
 backend/node_modules/
+
+# env files (all folders)
+.env
+*.env
+.env.*
 
 #frontend
 frontend/node_modules/
