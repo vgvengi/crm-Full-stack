@@ -15,39 +15,42 @@ function SideNav() {
       id: "homes",
       label: "Home",
       icon: MdOutlineHome,
-      path: "/",
+      path: "/dashboard",
     },
     {
       id: "contacts",
       label: "Contacts",
       icon: RiContactsBook3Line,
-      path: "/contacts",
+      path: "/dashboard/contacts",
     },
     {
       id: "companies",
       label: "Companies",
       icon: FaBuilding,
-      path: "/companies",
+      path: "/dashboard/companies",
     },
     {
       id: "deals",
       label: "Deals",
       icon: FaRegHandshake,
-      path: "/deals",
+      path: "/dashboard/deals",
     },
   ];
 
   return (
-    <div className="bg-[#333333] flex flex-col  ">
+    <div className="h-full w-full bg-[#333333] flex flex-col items-center pt-3">
       {sideNavList.map((sideNavigate, index) => {
         const Icon = sideNavigate.icon;
         return (
-          <div key={sideNavigate.id}>
+          <div
+            key={sideNavigate.id}
+            className="w-full flex flex-col items-center"
+          >
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  className={`flex justify-center items-center
-             cursor-pointer ml-1 h-10 w-10 rounded-full hover:bg-[#4D4D4D]
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center p-0
+             cursor-pointer rounded-full hover:bg-[#4D4D4D]
              ${
                location.pathname === sideNavigate.path
                  ? "bg-[#4D4D4D]"
@@ -59,16 +62,17 @@ function SideNav() {
                   }}
                 >
                   {/* {sideNavigate.icon} */}
-                  <Icon className="" size={16} color="white" />
+                  <div className="flex h-5 w-5 items-center justify-center">
+                    <Icon className="" size={16} color="white" />
+                  </div>
+                  {/* <p className="text-white">{sideNavigate.label}</p> */}
                 </button>
               </TooltipTrigger>
               <TooltipContent side="right">
                 <p>{sideNavigate.label}</p>
               </TooltipContent>
             </Tooltip>
-            {index === 0 && (
-              <div className="w-6 h-1px ml-3 bg-white my-2"></div>
-            )}
+            {index === 0 && <div className="my-4 h-px w-8 bg-white"></div>}
           </div>
         );
       })}
