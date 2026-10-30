@@ -4,8 +4,10 @@
   "description": "",
   "main": "db.js",
   "scripts": {
-    "start":"tsx server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+     "dev": "tsx watch --env-file=local.env server.ts",
+     "dev:tidb": "tsx watch --env-file=tidb.env server.ts",
+     "start": "tsx server.ts",
+     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
