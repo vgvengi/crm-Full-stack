@@ -22,8 +22,8 @@ interface DealStage {
   stages_position: number;
   deal_stage_color: string;
 }
-    // This stageColors will map the mysql deal_stage_color to the Tailwind Class 
-    // like bg-blue for blue 
+// This stageColors will map the mysql deal_stage_color to the Tailwind Class
+// like bg-blue for blue
 const stageColors: Record<string, string> = {
   blue: "bg-blue-600",
   orange: "bg-orange-700",
