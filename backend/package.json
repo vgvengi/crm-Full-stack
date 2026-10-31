@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "db.js",
+  "main": "server.ts",
   "scripts": {
     "dev": "tsx watch --env-file=local.env server.ts",
     "dev:tidb": "tsx watch --env-file=tidb.env server.ts",
-    "start": "tsx server.ts",
+    "start": "tsx --env-file=local.env server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
