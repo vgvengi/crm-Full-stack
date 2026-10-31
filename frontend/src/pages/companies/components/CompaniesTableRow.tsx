@@ -23,9 +23,12 @@ export default function CompaniesTableRow() {
   ];
   const [showData, setShowData] = useState<dataType[]>([]);
   // fetchData is used for fetching data from backend
+  useEffect(()=>{
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/companies");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/companies`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch companies");
       }
@@ -35,14 +38,13 @@ export default function CompaniesTableRow() {
       console.log(error);
     }
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  fetchData();
+    },[])
 
   return (
     <div>
       <div className="overflow-x-auto rounded-xl border mt-4">
-        <table className="min-w-[1500px] w-full">
+        <table className="min-w-375 w-full">
           <thead className="bg-[#cccccc]">
             <tr className="border-b">
               {fields.map((field) => (
