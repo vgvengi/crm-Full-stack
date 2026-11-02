@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-type dataType = {
+type company = {
   id: number;
   companyName: string;
   companyOwner: string;
@@ -10,6 +10,7 @@ type dataType = {
   CountryRegion: string;
   industry: string;
 };
+
 export default function CompaniesTableRow() {
   const fields = [
     { id: 1, label: "Company name" },
@@ -21,26 +22,41 @@ export default function CompaniesTableRow() {
     { id: 7, label: "Country/Region" },
     { id: 8, label: "Industry" },
   ];
-  const [showData, setShowData] = useState<dataType[]>([]);
-  // fetchData is used for fetching data from backend
-  useEffect(()=>{
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/companies`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch companies");
-      }
-      const data = await response.json();
-      setShowData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  fetchData();
-    },[])
+  const [showData, setShowData] = useState<company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reload, setReload] = useState(0);
 
+  // fetchData is used for fetching data from backend
+  useEffect(()=> {
+    const controller = new AbortController();
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/companies`,
+          {
+            signal: controller.signal,
+          },
+        );
+        if (!response.ok) {
+          throw new Error(`Server error (${response.status})`);
+        }
+        setShowData(await response.json());
+      } catch (err) {
+        if ((err as Error).name === "AbortError") return;
+        setError("Couldn't load companies. Please try again.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+    return () => controller.abort();
+  }, [reload]);
+
+  
   return (
     <div>
       <div className="overflow-x-auto rounded-xl border mt-4">
