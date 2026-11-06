@@ -1,7 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { CiSearch } from "react-icons/ci";
-// import { BiPlusCircle } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa6";
 import { GrUpgrade } from "react-icons/gr";
 import { PiStarFourFill } from "react-icons/pi";
@@ -12,11 +11,17 @@ import useClickOutSide from "@/hooks/useClickOutSide";
 import SearchInput from "./SearchInput";
 import topNavItems from "./top-bar-lists/top-bar-items";
 import topBarNewList from "./top-bar-lists/top-bar-new-list";
+import { clearAuthenticated } from "@/auth";
 
+type User = {
+  email: string;
+  name: string;
+};
 
 function TopNav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [createNew, setCreateNew] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const createRef = useRef<HTMLDivElement | null>(null);
   useClickOutSide(ref, () => {
@@ -26,6 +31,46 @@ function TopNav() {
   useClickOutSide(createRef, () => {
     setCreateNew(false);
   });
+
+  useEffect(() => {
+    let active = true;
+
+    async function fetchUser() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/auth/me`,
+          {
+            credentials: "include",
+          },
+        );
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            clearAuthenticated();
+          }
+
+          throw new Error(
+            `Failed to fetch the current user: ${response.status}`,
+          );
+        }
+
+        const data: { user: User } = await response.json();
+
+        if (active) {
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Failed to fetch the current user:", error);
+      }
+    }
+
+    void fetchUser();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div className="h-full w-full flex items-center px-4">
       <div ref={ref} className="flex flex-row flex-1 min-w-0 max-w-100">
@@ -64,7 +109,7 @@ function TopNav() {
             </button>
             {/* </div> */}
           </TooltipTrigger>
-          <TooltipContent >
+          <TooltipContent>
             <p>Create New</p>
           </TooltipContent>
         </Tooltip>
@@ -103,7 +148,7 @@ function TopNav() {
           const Icon = topmenu.icon;
           return (
             <div className="flex flex-row" key={topmenu.id}>
-              <button className="w-[30px] h-[30px] mx-[5px] p-[8px] rounded-2xl hover:bg-[#4D4D4D] cursor-pointer">
+              <button className="w-7.5 h-7.5 mx-1.25 p-2 rounded-2xl hover:bg-[#4D4D4D] cursor-pointer">
                 <Icon color="#FFFFFF" />
               </button>
             </div>
@@ -125,7 +170,7 @@ function TopNav() {
           className="p-6
         text-white"
         >
-          random
+          {user?.name ?? "Loading..."}
         </p>
       </div>
     </div>
