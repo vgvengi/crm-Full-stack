@@ -9,7 +9,7 @@ export default function Dashboard() {
         <TopNav />
       </div>
       <div className="flex flex-row overflow-hidden">
-          <div className="w-[68px] shrink-0 overflow-hidden bg-[#333333]">
+          <div className="w-14 shrink-0 overflow-hidden bg-[#333333]">
           <SideNav />
         </div>
         {/* <main className="px-8 py-1.4  flex-1 rounded-l-5xl overflow-x-hidden overflow-y-hidden   bg-white"> */}
