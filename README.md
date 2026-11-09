@@ -16,7 +16,7 @@ A full-stack CRM inspired by HubSpot, built with **React 19, TypeScript, Express
 - **Contacts** — list contacts from MySQL, create new contacts, search and select rows in the table
 - **Companies** — list companies from MySQL, create new companies
 - **Deals pipeline** — pipeline columns, order and colours are read from a `deal_stages_array` table, so stages can change without a code change
-- **Authentication** — signup and login API with passwords hashed using Argon2
+- **Authentication** — signup and login API with Argon2-hashed passwords and an httpOnly JWT session cookie
 - **Dashboard UI** — responsive layout with sidebar and top navigation, built with Tailwind CSS v4 and Radix UI primitives
 - **Routing** — React Router v7 with a guarded dashboard area (see [Known limitations](#known-limitations))
 
@@ -28,7 +28,7 @@ A full-stack CRM inspired by HubSpot, built with **React 19, TypeScript, Express
 | UI | Radix UI, shadcn-style components, Lucide React, React Icons |
 | Backend | Node.js, Express, TypeScript |
 | Database | MySQL 8 with `mysql2` connection pool |
-| Security | Argon2 password hashing |
+| Security | Argon2 password hashing, signed JWT session cookies |
 
 ## Technical Decisions
 
@@ -60,6 +60,7 @@ A full-stack CRM inspired by HubSpot, built with **React 19, TypeScript, Express
 | --- | --- | --- |
 | `POST` | `/api/users` | Create a user account |
 | `POST` | `/api/auth/login` | Verify user credentials |
+| `GET` | `/api/auth/me` | Return the authenticated user |
 | `GET` | `/api/contacts` | List contacts |
 | `POST` | `/api/contacts` | Create a contact |
 | `GET` | `/api/companies` | List companies |
@@ -102,6 +103,7 @@ DB_NAME=hubspot_crm
 DB_PORT=3306
 DB_CONNECTION_LIMIT=10
 PORT=5000
+JWT_SECRET=replace_with_a_long_random_secret
 ```
 
 ### 3. Run the backend
@@ -128,7 +130,7 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 ## Known Limitations
 
-- **Auth is not enforced on the server yet.** The dashboard guard uses a `localStorage` flag on the client, and API routes do not check a session or token. This is the next thing being built.
+- The dashboard route guard uses a client-side `localStorage` flag. `/api/auth/me` validates its session cookie, but the CRM data routes are not protected yet.
 - Deals are displayed but not yet created, edited or moved between stages.
 - Contacts and companies support create and list only (no update or delete yet).
 - No automated tests or deployment yet.
