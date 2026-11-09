@@ -12,12 +12,14 @@ const app = express();
 
 app.use(cors(
   {
+    credentials: true,
     origin: process.env.CLIENT_URL ||  "http://localhost:5173"
   }
 ));
 app.use(express.json());
 
-
+// This app.get("/",(req,res)) it is used for whether the backend is running
+//  or not in vercel when deployed
 app.get("/", (_req, res) => {
   res.json({ status: "ok" });
 });
