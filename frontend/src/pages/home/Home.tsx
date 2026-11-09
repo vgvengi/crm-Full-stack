@@ -1,16 +1,17 @@
 // import React from 'react'
-// import { useState } from "react";
+import { useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaListCheck, FaPlus } from "react-icons/fa6";
 
 import MeetingCard from "../../components/meetings/MeetingCard";
 import Tasks from "../../components/tasks/Tasks";
+import NewTaskList from "./components/NewTaskList";
 import SalesPipeline from "../../components/sales-pipe-line/SalesPipeline";
 
 
 function Home() {
-      // const [clickNewTask, setClickNewTask] = useState(false);
+  const [clickNewTask, setClickNewTask] = useState(false);
 
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -32,17 +33,17 @@ function Home() {
 
   return (
     <div className="w-full  h-full mt-10 ">
-      <div className={` flex flex-col  mx-[211px]`}>
+      <div className={`flex flex-col px-4 sm:px-8 md:px-16 lg:px-52.75`}>
         <div className="flex flex-row items-center">
           <h3>{today}</h3>
-          <div className="flex items-center ms-auto">
+          <button className="flex items-center ms-auto cursor-pointer">
             <IoSettingsOutline />
             <span>Customize</span>
-          </div>
+          </button>
         </div>
         <h3 className={`text-4xl pb-2 mt-2`}>{getGreetings()} Vengatesh</h3>
       </div>
-      <div className={`mx-[211px] h-[876px] flex flex-col`}>
+      <div className={`px-4 sm:px-8 md:px-16 lg:px-52.75 flex-1 flex flex-col`}>
         <div className="flex flex-row items-center gap-1">
           <FaRegCalendarAlt />
           <p className="underline cursor-pointer hover:text-green-800">
@@ -59,7 +60,7 @@ function Home() {
           <FaListCheck />
           <p>Tasks</p>
           <div className="ms-auto mr-2 cursor-pointer"
-          onClick={()=>setClickNewTask}
+          onClick={()=>setClickNewTask(true)}
           >
             <FaPlus color="gray" />
           </div>
@@ -80,9 +81,19 @@ function Home() {
         </div>
 
         <div className="w-full h-full z-40 inset-0">
-          {/* <Tasks setClickNewTask={setClickNewTask(true)} /> */}
+          <Tasks />
         </div>
       </div>
+
+      {clickNewTask && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/20 z-40"
+            onClick={() => setClickNewTask(false)}
+          />
+          <NewTaskList onClose={() => setClickNewTask(false)} />
+        </>
+      )}
     </div>
   );
 }
