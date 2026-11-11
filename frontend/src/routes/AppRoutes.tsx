@@ -9,6 +9,7 @@ import EditProperties from "@/pages/deals/editsDeals/EditProperties";
 import GeneralProperty from "@/pages/deals/editsDeals/general/GeneralProperty";
 import LoginPage from "@/pages/loginPage/LoginPage";
 import SignUpPage from "@/pages/signUpPage/SignUpPage";
+import ProtectedRouter from "../components/protectedRouter/ProtectedRouter";
 
 export default function routes() {
   return (
@@ -16,14 +17,16 @@ export default function routes() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="sign-up" element={<SignUpPage />} />
-        <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<Home />} />
-          <Route path="contacts" element={<Contacts />} />
-          <Route path="companies" element={<Companies />} />
-          <Route path="deals" element={<Deals />} />
-          <Route path="deals/restore" element={<Restore />} />
-          <Route path="deals/edit-properties" element={<EditProperties />} />
-          <Route path="deals/general" element={<GeneralProperty />} />
+        <Route element={<ProtectedRouter />}>
+          <Route path="/dashboard" element={<Dashboard/>}>
+            <Route index element={<Home />} />
+            <Route path="contacts" element={<Contacts />} />
+            <Route path="companies" element={<Companies />} />
+            <Route path="deals" element={<Deals />} />
+            <Route path="deals/restore" element={<Restore />} />
+            <Route path="deals/edit-properties" element={<EditProperties />} />
+            <Route path="deals/general" element={<GeneralProperty />} />
+          </Route>
         </Route>
       </Routes>
     </div>
