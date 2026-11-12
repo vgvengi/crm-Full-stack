@@ -6,6 +6,7 @@ import companyRouter from "./routes/companies.routes";
 import dealsRouter from "./routes/deals-pipe-line.routes";
 import userSignUpRouter from "./routes/users.signup.routes";
 import userLoginRouter from "./routes/users.login.routes";
+import assistantRouter from "./routes/assistant.routes";
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/companies", companyRouter);
 app.use("/api/dealsStages", dealsRouter);
 app.use("/api/users",userSignUpRouter);
 app.use("/api/auth", userLoginRouter);
+app.use("/api/assistant", assistantRouter);
 app.use(errorHandler);
 
 if(!process.env.VERCEL){
