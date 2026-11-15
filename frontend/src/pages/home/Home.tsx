@@ -9,7 +9,6 @@ import Tasks from "../../components/tasks/Tasks";
 import NewTaskList from "./components/NewTaskList";
 import SalesPipeline from "../../components/sales-pipe-line/SalesPipeline";
 
-
 function Home() {
   const [clickNewTask, setClickNewTask] = useState(false);
 
@@ -35,13 +34,13 @@ function Home() {
     <div className="w-full  h-full mt-10 ">
       <div className={`flex flex-col px-4 sm:px-8 md:px-16 lg:px-52.75`}>
         <div className="flex flex-row items-center">
-          <h3>{today}</h3>
+          <p className="">{today}</p>
           <button className="flex items-center ms-auto cursor-pointer">
             <IoSettingsOutline />
             <span>Customize</span>
           </button>
         </div>
-        <h3 className={`text-4xl pb-2 mt-2`}>{getGreetings()} Vengatesh</h3>
+        <p className={`text-4xl  pb-2 mt-2`}>{getGreetings()} </p>
       </div>
       <div className={`px-4 sm:px-8 md:px-16 lg:px-52.75 flex-1 flex flex-col`}>
         <div className="flex flex-row items-center gap-1">
@@ -59,20 +58,21 @@ function Home() {
         <div className="mt-6 flex flex-row items-center gap-2">
           <FaListCheck />
           <p>Tasks</p>
-          <div className="ms-auto mr-2 cursor-pointer"
-          onClick={()=>setClickNewTask(true)}
+          <div
+            className="ms-auto mr-2 cursor-pointer"
+            onClick={() => setClickNewTask(true)}
           >
             <FaPlus color="gray" />
           </div>
           <div className="flex flex-row items-center">
             <div
-              className="border border-gray-500 h-[30px] cursor-pointer
-             w-fit px-[4px] hover:bg-[#E6E6E6] rounded-1xl "
+              className="border border-gray-500 h-7.5 cursor-pointer
+             w-fit px-1 hover:bg-[#E6E6E6] rounded-1xl "
             >
               Open
             </div>
             <div
-              className="border border-gray-500 h-[30px] px-[3px] 
+              className="border border-gray-500 h-7.5 px-0.75 
             cursor-pointer hover:bg-[#E6E6E6] rounded-1xl"
             >
               Completed
