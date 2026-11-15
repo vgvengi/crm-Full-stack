@@ -9,6 +9,12 @@ type BreezeAssistantProps = {
   onClose: () => void;
 };
 
+type ChatResponse = {
+  reply?: string;
+  error?: string;
+  message?: string;
+};
+
 export default function BreezeAssistant({ onClose }: BreezeAssistantProps) {
   const { currentSession, addMessage, createSession } = useChatStore();
   const [input, setInput] = useState("");
@@ -51,8 +57,13 @@ export default function BreezeAssistant({ onClose }: BreezeAssistantProps) {
         }
       );
 
-      if (!response.ok) throw new Error(`Status ${response.status}`);
-      const data = await response.json();
+      const data: ChatResponse = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.reply) {
+        throw new Error(
+          data.error ?? data.message ?? `Chat request failed (status ${response.status}).`,
+        );
+      }
 
       addMessage({
         id: `msg-${Date.now()}`,
@@ -66,7 +77,9 @@ export default function BreezeAssistant({ onClose }: BreezeAssistantProps) {
         id: `msg-${Date.now()}`,
         role: "assistant",
         content:
-          "Sorry, I encountered an error. Please try again in a moment.",
+          error instanceof Error
+            ? `Sorry, I couldn't send that message: ${error.message}`
+            : "Sorry, I couldn't send that message. Please try again.",
         timestamp: new Date(),
       });
     } finally {
