@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 type company = {
   id: number;
   companyName: string;
@@ -55,20 +55,25 @@ export default function CompaniesTableRow() {
     fetchData();
     return () => controller.abort();
   }, [reload]);
+  const messageRow =(content :ReactNode)=>(
+    <tr>
+      <td colSpan={fields.length} className="p-6 text-center">{content}</td>
+    </tr>
 
-  
+  )
+
   return (
     <div>
       <div className="overflow-x-auto rounded-xl border mt-4">
         <table className="min-w-375 w-full">
-          <thead className="bg-[#cccccc]">
+          <thead >
             <tr className="border-b">
               {fields.map((field) => (
-                <th key={field.id}>{field.label}</th>
+                <th className="font-normal" key={field.id}>{field.label}</th>
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {showData.map((show) => (
               <tr key={show.id}>
                 <td>{show.companyName}</td>
