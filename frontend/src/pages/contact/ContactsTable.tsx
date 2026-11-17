@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SearchX } from "lucide-react";
 import { MdKeyboardArrowRight } from "react-icons/md";
-
+import { Link } from "react-router-dom";
 const cellSize = "px-4 py-2 text-sm whitespace-nowrap "
 type Contact = {
   id: number;
@@ -155,8 +155,11 @@ function ContactsTable({
                     <span
                       className="block max-w-40 cursor-pointer truncate hover:underline"
                       title={`${contact.first_name} ${contact.last_name}`}
+                      // onClick={}
                     >
+                      <Link to={`/dashboard/contacts/${contact.id}`}>
                       {contact.first_name} {contact.last_name}
+                      </Link>
                     </span>
                   </div>
                 </td>
