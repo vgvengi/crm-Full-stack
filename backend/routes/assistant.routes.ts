@@ -9,17 +9,17 @@ const router = Router();
 const aiServiceCache = new Map<string, AIChatService>();
 
 function getAIService(userEmail: string): AIChatService {
-  if (!aiServiceCache.has(userEmail as any)) {
-    aiServiceCache.set(userEmail as any, new AIChatService());
+  if (!aiServiceCache.has(userEmail)) {
+    aiServiceCache.set(userEmail, new AIChatService());
   }
-  return aiServiceCache.get(userEmail as any)!;
+  return aiServiceCache.get(userEmail)!;
 }
 
 // POST /api/assistant/chat - Send a message
 router.post("/chat", authenticate, async (req: Request, res: Response) => {
   try {
     const { message, includeContext, clearHistory } = req.body;
-    const userId = (req as any).authenticatedUser?.email;
+    const userId = req.authenticatedUser?.email;
 
     if (!userId) {
       return res.status(401).json({ error: "Authentication required" });
@@ -73,7 +73,7 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const { title } = req.body;
-      const userEmail = (req as any).authenticatedUser?.email;
+      const userEmail = req.authenticatedUser?.email;
 
       if (!userEmail) {
         return res.status(401).json({ error: "Authentication required" });
@@ -106,7 +106,7 @@ router.post(
   authenticate,
   async (req: Request, res: Response) => {
     try {
-      const userEmail = (req as any).authenticatedUser?.email;
+      const userEmail = req.authenticatedUser?.email;
 
       if (!userEmail) {
         return res.status(401).json({ error: "Authentication required" });
