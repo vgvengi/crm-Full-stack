@@ -78,7 +78,6 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-
 // this router is for puting the notes into the mysql for that particular contacts
 
 router.post("/:id/notes", async (req: Request, res: Response) => {
@@ -99,5 +98,15 @@ router.post("/:id/notes", async (req: Request, res: Response) => {
   }
 });
 
-
+router.get("/:id/notes", async (req: Request, res: Response) => {
+  try {
+    const [rows] = await db.query<RowDataPacket[]>(
+      "SELECT * FROM notes WHERE contact_id =? ORDER BY  created_at  DESC ",
+      [req.params.id]
+    );
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({message:"failed to get the note response "})
+  }
+});
 export default router;
