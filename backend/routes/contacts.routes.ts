@@ -78,4 +78,26 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+
+// this router is for puting the notes into the mysql for that particular contacts
+
+router.post("/:id/notes", async (req: Request, res: Response) => {
+  const { body } = req.body;
+  if (!body || !body.trim()) {
+    res.status(500).json({ message: "note cannot be empty " });
+    return;
+  }
+  try {
+    const [result] = await db.query<ResultSetHeader>(
+      "INSERT INTO notes(contact_id,body) VALUES(?,?)",
+      [req.params.id, body.trim()],
+    );
+    res.status(201).json({ id: result.insertId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "unable to upload note " });
+  }
+});
+
+
 export default router;
