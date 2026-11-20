@@ -12,6 +12,35 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: props) {
   const [body, setBody] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  async function handleCreate() {
+    if (!body.trim()) return;
+    setSaving(true);
+    setError("");
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/contacts/${contactId}/notes`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ body }),
+        },
+      );
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.message || "Failed to save note");
+      }
+
+      setBody("");
+      onCreated();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save note");
+    } finally {
+      setSaving(false);
+    }
+  };
   return (
     <div className="fixed bottom-4 right-4 z-50 w-140 max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white shadow-2xl">
       {/* header */}
