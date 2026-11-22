@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
-// React has its own PointerEvent type. We import it under a different name so it
 // doesn't clash with the browser's built-in PointerEvent type.
 import type { PointerEvent as ReactPointerEvent } from "react";
-// GripHorizontal = the little dotted bar you saw at the top of the HubSpot panel.
-// import { HiItalic } from "react-icons/hi2";
 
 import { X, GripHorizontal } from "lucide-react";
+import { Italic } from "lucide-react";
+import { Underline } from "lucide-react";
 
-// Renamed `props` -> `Props`: types in TypeScript are PascalCase by convention.
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
+
 type Props = {
   contactId: number;
   contactName: string;
@@ -45,10 +45,11 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
   const [error, setError] = useState("");
 
   const [boldletter, setBoldletter] = useState(false);
-  const[italicletter , setItalicletter] = useState(false);
+  const [italicletter, setItalicletter] = useState(false);
 
   const [underlineLetter, setunderlineLetter] = useState(false);
-   // ---------------- DRAG STATE ----------------
+  const [boldButton, setboldButton] = useState(false);
+  // ---------------- DRAG STATE ----------------
 
   // STATE because changing it must re-render: the new offset has to reach the
   // `transform` style so the panel actually moves on screen.
@@ -243,35 +244,71 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
         value={body}
         onChange={(e) => setBody(e.target.value)}
         placeholder="Start typing to leave a note..."
-        className={`h-40 w-full resize-none px-5 py-4 outline-non 
-          ${boldletter ? "font-bold":""} 
-          ${italicletter ?"italic":""}
-          ${underlineLetter ? "underline":""}
+        className={`h-40 w-full resize-none px-5 py-4 outline-non
+          placeholder:no-underline placeholder:not-italic placeholder:font-normal 
+          ${boldletter ? "font-bold" : ""} 
+          ${italicletter ? "italic" : ""}
+          ${underlineLetter ? "underline" : ""}
           `}
         autoFocus
       />
-      <div className="flex flex-row gap-2 mb-3">
-        <button className="border border-transparent hover:border-gray-400  px-2 "
-        onClick={()=>setBoldletter((prev)=>!prev)}
-        >
-          B
-        </button>
-        <button className=" border border-transparent hover:border-gray-400 italic px-2"
-        onClick={()=>setItalicletter((prev)=>!prev)}
-        >
-          I
-        </button>
+      <div className="flex flex-row  mb-3">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className={`border  hover:border-gray-400  px-2 
+                ${boldButton ? " border-gray-700  bg-gray-400": "border-transparent "}
+                `}
+              onClick={() => {
+                setBoldletter((prev) => !prev);
+                setboldButton((prev) => !prev);
+              }}
+            >
+              B
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <p>B</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className=" border border-transparent hover:border-gray-400 italic px-2"
+              onClick={() => {setItalicletter((prev) => !prev)}
+            
+            }
+            >
+              <Italic size={14} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Italic</TooltipContent>
+        </Tooltip>
         {/* <button className="border border-transparent hover:border-gray-400 px-2"
         // onClick={()}
         >U</button> */}
-        <button
-          className="border border-transparent hover:border-gray-400 px-2 underline"
-          onClick={() => setunderlineLetter((prev) => !prev)}
-          aria-label="Underline"
-          aria-pressed={underlineLetter}
-        >
-          U
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className={`hover:border-gray-400
+              `}
+              onClick={() => {
+                setunderlineLetter((prev) => !prev);
+              }}
+              aria-label="Underline"
+              aria-pressed={underlineLetter}
+            >
+              <Underline size={14} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Underline</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild></TooltipTrigger>
+          <button></button>
+        </Tooltip>
       </div>
 
       {/* footer */}
