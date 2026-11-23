@@ -5,8 +5,16 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import { X, GripHorizontal } from "lucide-react";
 import { Italic } from "lucide-react";
 import { Underline } from "lucide-react";
+import { RemoveFormatting } from "lucide-react";
+import { FaAngleDown, FaCaretDown } from "react-icons/fa6";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/ui/popover";
 
 type Props = {
   contactId: number;
@@ -43,12 +51,15 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
   const [body, setBody] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-
+  // this state is for change font
   const [boldletter, setBoldletter] = useState(false);
   const [italicletter, setItalicletter] = useState(false);
-
   const [underlineLetter, setunderlineLetter] = useState(false);
+  // this state is for change whether  button is active or not
   const [boldButton, setboldButton] = useState(false);
+  const [italicButton, setitalicButton] = useState(false);
+  const [underLineButton, setUnderLineButton] = useState(false);
+
   // ---------------- DRAG STATE ----------------
 
   // STATE because changing it must re-render: the new offset has to reach the
@@ -224,11 +235,16 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
       {/* header. pt-4 leaves room for the grip above "Note" */}
       {/* Removed the empty <button></button> that was here. It did nothing.
           Add the collapse / maximise buttons later, one at a time. */}
-      <div className="flex items-center justify-between border-b px-5 pb-3 pt-4">
-        <h3 className="font-semibold">Note</h3>
-        <button onClick={onClose} aria-label="Close">
-          <X size={18} />
-        </button>
+      <div className="flex items-center justify-between  border-b px-5 pb-3 pt-4">
+        <div className="flex flex-row gap-5 items-center">
+          <FaAngleDown />
+          <h3 className="font-semibold">Note</h3>
+        </div>
+        <div className="justify-end">
+          <button onClick={onClose} aria-label="Close">
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       {/* For: contact */}
@@ -245,19 +261,19 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
         onChange={(e) => setBody(e.target.value)}
         placeholder="Start typing to leave a note..."
         className={`h-40 w-full resize-none px-5 py-4 outline-non
-          placeholder:no-underline placeholder:not-italic placeholder:font-normal 
+          placeholder:not-italic placeholder:font-normal 
           ${boldletter ? "font-bold" : ""} 
           ${italicletter ? "italic" : ""}
-          ${underlineLetter ? "underline" : ""}
+          ${underlineLetter && body ? "underline" : ""}
           `}
         autoFocus
       />
-      <div className="flex flex-row  mb-3">
+      <div className="flex flex-row gap-1 mb-3">
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               className={`border  hover:border-gray-400  px-2 
-                ${boldButton ? " border-gray-700  bg-gray-400": "border-transparent "}
+                ${boldButton ? " border-gray-700  bg-gray-400" : "border-transparent "}
                 `}
               onClick={() => {
                 setBoldletter((prev) => !prev);
@@ -274,10 +290,13 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
-              className=" border border-transparent hover:border-gray-400 italic px-2"
-              onClick={() => {setItalicletter((prev) => !prev)}
-            
-            }
+              className={`border hover:border-gray-400 italic px-2
+                ${italicButton ? " border-gray-700 bg-gray-400" : "border-transparent"}
+                `}
+              onClick={() => {
+                setItalicletter((prev) => !prev);
+                setitalicButton((prev) => !prev);
+              }}
             >
               <Italic size={14} />
             </button>
@@ -290,10 +309,12 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <button
-              className={`hover:border-gray-400
+              className={`border hover:border-gray-400 px-2
+                ${underLineButton ? "border-gray-700 bg-gray-400" : "border-transparent"}
               `}
               onClick={() => {
                 setunderlineLetter((prev) => !prev);
+                setUnderLineButton((prev) => !prev);
               }}
               aria-label="Underline"
               aria-pressed={underlineLetter}
@@ -306,9 +327,41 @@ function NotePanel({ contactId, contactName, onClose, onCreated }: Props) {
           </TooltipContent>
         </Tooltip>
         <Tooltip>
-          <TooltipTrigger asChild></TooltipTrigger>
-          <button></button>
+          <TooltipTrigger asChild>
+            <button className={`px-2 border hover:border-gray-400`}>
+              <RemoveFormatting size={14} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Clear Formatting</p>
+          </TooltipContent>
         </Tooltip>
+        <Popover>
+          <PopoverTrigger asChild>
+            <button>More</button>
+          </PopoverTrigger>
+          <PopoverContent side="top">
+            <div className="flex flex-row">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="cursor-pointer">
+                    {" "}
+                    <span></span>
+                    <FaCaretDown size={10}/>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Font</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <button>
+
+              </button>
+
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
       {/* footer */}
