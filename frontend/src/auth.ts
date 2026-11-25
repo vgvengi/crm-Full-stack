@@ -7,3 +7,7 @@ export function isAuthenticated(): boolean {
 export function markAuthenticated(): void {
   localStorage.setItem(AUTH_STORAGE_KEY, "true");
 }
+
+export function clearAuthenticated(): void {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+}
