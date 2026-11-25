@@ -83,12 +83,12 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/:id/notes", async (req: Request, res: Response) => {
   const { body } = req.body;
   if (!body || !body.trim()) {
-    res.status(500).json({ message: "note cannot be empty " });
+    res.status(400).json({ message: "note cannot be empty " });
     return;
   }
   try {
     const [result] = await db.query<ResultSetHeader>(
-      "INSERT INTO notes(contact_id,body) VALUES(?,?)",
+      "INSERT INTO notes(contact_id,note) VALUES(?,?)",
       [req.params.id, body.trim()],
     );
     res.status(201).json({ id: result.insertId });
