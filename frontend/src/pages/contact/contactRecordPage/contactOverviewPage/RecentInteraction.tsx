@@ -3,6 +3,8 @@ import { MdEmail } from "react-icons/md";
 import { PiNotePencilLight } from "react-icons/pi";
 import { useQuery } from "@tanstack/react-query";
 import DataAnalysis from "../../../../assets/DataAnalysis.svg";
+import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { Tooltip,TooltipTrigger, TooltipContent } from "../../../../ui/tooltip";
 
 // ---------- Types ----------
 type Note = {
@@ -15,7 +17,6 @@ type RecentInteractionData = {
   ownerName: string;
   notes: Note[];
 };
-
 // ---------- Fetch function (outside the component) ----------
 const fetchRecentInteraction = async (
   contactId: number,
@@ -45,7 +46,6 @@ const fetchRecentInteraction = async (
     notes: sorted,
   };
 };
-
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-IN", {
     day: "numeric",
@@ -57,7 +57,6 @@ const formatDate = (iso: string) =>
 type Props = {
   contactId: number;
 };
-
 export default function RecentInteraction({ contactId }: Props) {
   const { data, isLoading, error } = useQuery({
     queryKey: ["recent-interaction", contactId],
@@ -68,10 +67,10 @@ export default function RecentInteraction({ contactId }: Props) {
   const latestNote = data?.notes[0];
 
   return (
-    <div className="bg-white flex flex-col shadow-xl rounded-2xl">
+    <div className="bg-white flex flex-col drop-shadow-xs rounded-2xl">
       <div className="flex flex-row items-center justify-between h-full w-full py-3 px-5">
         <span className="font-bold">Recent Interactions</span>
-        <span className="inline-flex items-center gap-1 rounded-md bg-linear-to-r from-pink-600 to-orange-500 px-2 py-0.5 text-xs font-semibold text-white">
+        <span className="inline-flex items-center gap-1 rounded-md bg-linear-to-r from-pink-600 to-orange-500 px-2 py-0.5   text-xs  font-semibold text-white">
           <Sparkles size={12} />
           AI
         </span>
@@ -93,7 +92,7 @@ export default function RecentInteraction({ contactId }: Props) {
         </div>
       </div>
 
-      <div className="flex py-3 px-5 m-3 border flex-col rounded-2xl">
+      <div className="flex py-3 px-5 ml-3 border flex-col rounded-2xl">
         <p className="font-bold mb-3">Outbound</p>
 
         {isLoading && <span>Loading...</span>}
@@ -109,11 +108,37 @@ export default function RecentInteraction({ contactId }: Props) {
             <PiNotePencilLight />
             <button className="hover:underline">Note</button>
             <span>
-              by {data.ownerName || "Unknown"} · {formatDate(latestNote.created_at)}
+              by {data.ownerName || "Unknown"} ·{" "}
+              {formatDate(latestNote.created_at)}
             </span>
           </div>
         )}
       </div>
+     
+      <div className="flex  m-3 ">
+        <Tooltip>
+          <TooltipTrigger asChild>
+
+        <span className="p-2  hover:bg-gray-300 rounded">
+          <ThumbsUp size={15} />
+        </span>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            <p>This is What I expected </p>
+          </TooltipContent>
+        </Tooltip>
+     <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="p-2 rounded hover:bg-gray-300">
+          <ThumbsDown size={15} />
+        </span>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+        <p>This is not what I expected</p>
+      </TooltipContent>
+     </Tooltip>
+      </div>
+
     </div>
   );
 }
