@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <clipPath id="a">
+      <path fill="none" stroke="#800051" stroke-miterlimit="10" stroke-width="2" d="M85.5 84C62.58 84 44 65.42 44 42.5S62.58 1 85.5 1 127 19.58 127 42.5 108.42 84 85.5 84"/>
+    </clipPath>
+  </defs>
+  <g fill="none" stroke="#ff4800" stroke-miterlimit="10" stroke-width="2" clip-path="url(#a)">
+    <path d="M56 31h16a2 2 0 0 1 2 2v54H54V33a2 2 0 0 1 2-2ZM76 11h16a2 2 0 0 1 2 2v74H74V13a2 2 0 0 1 2-2ZM96 23h16a2 2 0 0 1 2 2v62H94V25a2 2 0 0 1 2-2Z"/>
+  </g>
+  <path fill="none" stroke="#800051" stroke-miterlimit="10" stroke-width="2" d="M85.5 84C62.58 84 44 65.42 44 42.5S62.58 1 85.5 1 127 19.58 127 42.5 108.42 84 85.5 84"/>
+  <path fill="none" stroke="#ff4800" stroke-miterlimit="10" stroke-width="2" d="M49.72 78.28a7 7 0 0 0-9.9 0L3.05 115.05a7 7 0 0 0 0 9.9"/>
+  <path fill="none" stroke="#800051" stroke-miterlimit="10" stroke-width="2" d="M3.05 124.95a7 7 0 0 0 9.9 0l36.77-36.77a7 7 0 0 0 0-9.9M57 72.414l-7.281 7.281"/>
+  <path fill="none" stroke="#00494b" stroke-miterlimit="10" stroke-width="2" d="m122 30-16 16M102 46 86 30"/>
+  <circle cx="84" cy="28" r="3" fill="none" stroke="#ff4800" stroke-miterlimit="10" stroke-width="2"/>
+  <circle cx="104" cy="48" r="3" fill="#ff4800" stroke="#00494b" stroke-miterlimit="10" stroke-width="2"/>
+  <path fill="none" stroke="#00494b" stroke-miterlimit="10" stroke-width="2" d="M82 30 66 46"/>
+  <circle cx="64" cy="48" r="3" fill="#ff4800" stroke="#00494b" stroke-miterlimit="10" stroke-width="2"/>
+  <circle cx="84" cy="28" r="3" fill="#ff4800" stroke="#00494b" stroke-miterlimit="10" stroke-width="2"/>
+  <circle cx="124" cy="28" r="3" fill="#ff4800" stroke="#00494b" stroke-miterlimit="10" stroke-width="2"/>
+</svg>
