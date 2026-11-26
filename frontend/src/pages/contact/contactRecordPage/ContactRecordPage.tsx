@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { SlArrowLeft } from "react-icons/sl";
 import { MdKeyboardArrowRight } from "react-icons/md";
-import { User } from "lucide-react";
+import { Settings, User, PanelRight } from "lucide-react";
 import { BiSolidPencil } from "react-icons/bi";
-import { PiNotePencilThin } from "react-icons/pi";
 
 import RecordLayOut from "@/layouts/record/RecordLayOut";
 
@@ -15,6 +14,12 @@ import useClickOutSide from "@/hooks/useClickOutSide";
 import QuickAcitionButton from "../../../components/contact-record/QuickActionButtons";
 import MoreMenu from "@/components/contact-record/MoreMenu";
 import NotePanel from "@/components/contact-record/NotePanel";
+import ContactOverview from "./ContactOverview";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/ui/tooltip";
+
+import RecordRightSidePanel from "./contactOverviewPage/RecordRightSidePanel";
+import CreateDeals from "@/pages/deals/createDeals/CreateDeals";
+import CompanyForm from "@/pages/companies/components/CompanyForm";
 
 type Contacts = {
   id: number;
@@ -27,11 +32,6 @@ type Contacts = {
   lifeCycleStage: string;
   leadStatus: string;
 };
-type Prop ={
-  contact_id : number;
-  contact_name : string;
-  onClose:()=>void
-}
 
 function ContactRecordPage() {
   const { id } = useParams();
@@ -43,13 +43,30 @@ function ContactRecordPage() {
   const [noteOpen, setNoteOpen] = useState(false);
   const [actionList, setActionList] = useState(false);
 
+  const [catchUp, setCatchUp] = useState(true);
+
+  const [activityOpen, setActivityOpen] = useState(true);
+
+  const [openRightPanel, setOpenRightPanel] = useState(true);
+
+  // this states is for right side panel  of deals , companies, tickets, payments, attachements
+  const [openDealPanel, setOpenDealPanel] = useState(false);
+  const [openCompanies, setOpenCompanies] = useState(false);
+  const [openTickets, setOpenTickets] = useState(false);
+  const [openPayments, setOpenPayments] = useState(false);
+  const [openAttachements, setOpenAttachements] = useState(false);
+
+  // this state is for button to open deal creating component
+  const [addDeal, setAddDeal] = useState(false);
+  const [addCompany, setAddCompany] = useState(false);
+
   useClickOutSide(handleRef, () => {
     setActionList(false);
   });
 
   // this function defines which button do you click ,if you click note button note state will change
 
-  function handleQuickAction(key:string) {
+  function handleQuickAction(key: string) {
     if (key === "note") setNoteOpen(true);
     if (key === "email") window.location.href = `mailto:${contacts?.email}`;
   }
@@ -79,7 +96,7 @@ function ContactRecordPage() {
     <RecordLayOut
       left={
         <>
-          <div className={`border p-4 rounded-2xl  `}>
+          <div className={`border p-4 rounded-2xl bg-white  `}>
             <div
               className="flex flex-row justify-between relative"
               ref={handleRef}
@@ -132,7 +149,7 @@ function ContactRecordPage() {
             </a>
             <div className="flex flex-row gap-2">
               <div className="flex flex-col items-center ">
-                <QuickAcitionButton onAction={handleQuickAction}/>
+                <QuickAcitionButton onAction={handleQuickAction} />
               </div>
               <MoreMenu />
             </div>
@@ -162,17 +179,100 @@ function ContactRecordPage() {
           </div>
         </>
       }
-      middle={<>
-      {noteOpen && (
-       <NotePanel
-       onClose={onc}
-       />
-      )}
-      </>}
-      right={<></>}
+      middle={
+        <>
+          <div className="flex flex-col h-full min-h-0">
+            {noteOpen && (
+              <NotePanel
+                contactId={contacts.id}
+                contactName={`${contacts.first_name} ${contacts.last_name}`}
+                onClose={() => setNoteOpen(false)}
+                onCreated={() => setNoteOpen(false)}
+              />
+            )}
+            {addDeal && (
+              <div>
+                <CreateDeals
+                  onClose={() => setAddDeal(false)}
+                  onCreate={() => setAddDeal(false)}
+                />
+              </div>
+            )}
+            {addCompany && (
+              <div>
+                <CompanyForm onClose={() => setAddCompany(false)} />
+              </div>
+            )}
+            <div className="w-full h-full">
+              <div className="sticky top-0 z-10  flex flex-row justify-between ">
+                <div className="flex flex-1 border-t border-r border-l overflow-hidden">
+                  <button className=" flex text-center  text-nowrap flex-1">
+                    Catch-up{" "}
+                  </button>
+                  <button className=" flex flex-1  text-nowrap">
+                    Activities
+                  </button>
+                </div>
+
+                <div className="flex flex-row items-center gap-2">
+                  <button className="flex py-2 px-2 flex-row  items-center gap-2 rounded-2xl cursor-pointer">
+                    <Settings size={15} />
+                    <span>Customize</span>
+                  </button>
+                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setOpenRightPanel((prev) => !prev)}
+                      className="flex  z-10 h-8 w-8 items-center justify-center rounded-full border border-teal-300 text-teal-700 cursor-pointer hover:bg-[#E0FCFA]"
+                    >
+                      <PanelRight size={15} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    {openRightPanel ? "Collapse sidebar" : "Expand sidebar"}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              {catchUp && <ContactOverview contactId={contacts.id} />}
+            </div>
+          </div>
+        </>
+      }
+      right={
+        <>
+          <RecordRightSidePanel
+            name="Deals"
+            isOpen={openDealPanel}
+            onToggle={() => setOpenDealPanel((prev) => !prev)}
+            onAdd={() => setAddDeal(true)}
+          />
+          <RecordRightSidePanel
+            name="Companies"
+            isOpen={openCompanies}
+            onToggle={() => setOpenCompanies((prev) => !prev)}
+            onAdd={() => setAddCompany(true)}
+          />
+          <RecordRightSidePanel
+            name="Tickets"
+            isOpen={openTickets}
+            onToggle={() => setOpenTickets((prev) => !prev)}
+          />
+          <RecordRightSidePanel
+            name="Payments"
+            isOpen={openPayments}
+            onToggle={() => setOpenPayments((prev) => !prev)}
+          />
+          <RecordRightSidePanel
+            name="Attachements"
+            isOpen={openAttachements}
+            onToggle={() => setOpenAttachements((prev) => !prev)}
+          />
+        </>
+      }
+      rightOpen={openRightPanel}
     />
   );
-
 }
 
 export default ContactRecordPage;
